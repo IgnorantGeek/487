@@ -11,6 +11,6 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-// header file for the client
+// header file for UDP
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef TCP_CLIENT_H
- #define TCP_CLIENT_H
+#ifndef TCP_SERVER_H
+ #define TCP_SERVER_H
 
 #include "./defaults.h"
 #include <stdio.h>
