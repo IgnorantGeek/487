@@ -9,7 +9,7 @@ public class TcpClient
     {
         String servIP = "127.0.0.1";
 
-        Socket clientSocket = new Socket(servIP, 56717);
+        Socket clientSocket = new Socket(servIP, 51717);
 
         DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
         DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
