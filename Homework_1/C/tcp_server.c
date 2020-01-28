@@ -3,7 +3,6 @@
 int main(int argc, char **argv)
 {
     // Initialize locals
-    char buffer[1024];
     int server_socket;
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
@@ -48,6 +47,23 @@ int main(int argc, char **argv)
         char packet_length_bytes[4];
         receive_bytes(client_socket, packet_length_bytes, 4);
         int packet_length = toInteger32_le(packet_length_bytes);
+
+        // Allocate buffer and read data
+        char * buf = (char *) malloc(packet_length);
+        receive_bytes(client_socket, buf, packet_length);
+
+        // Log the message from the client
+        printf("Message recieved from client: %s", buf);
+
+        // Send back the response
+        // send(client_socket, packet_length_bytes, 4, 0);
+        // send(client_socket, buf, packet_length, 0);
+
+        // release buffer
+        free(buf);
+
+        // Remove me
+        break;
     }
     return 0;
 }
