@@ -1,5 +1,5 @@
-#ifndef UDP_SERVER_H
- #define UDP_SERVER_H
+#ifndef UDP_CLIENT_H
+ #define UDP_CLIENT_H
 
 #include "./defaults.h"
 #include <stdio.h>

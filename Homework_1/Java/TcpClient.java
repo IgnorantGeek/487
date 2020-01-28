@@ -25,7 +25,7 @@ public class TcpClient
         outStream.flush();
         // read the data back
         inStream.readFully(bufLengthInBinary); // ignore the first 4 bytes
-        inStream.readFully(buf); // 
+        inStream.readFully(buf);
         // convert the binary bytes to string
         String ret = new String(buf);
         // should be all upcases now

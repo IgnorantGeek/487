@@ -1,6 +1,6 @@
 #include "tcp_server.h"
 
-int main(int argc, char *args[])
+int main(int argc, char **argv)
 {
     // Initialize locals
     int cSock;
@@ -16,12 +16,9 @@ int main(int argc, char *args[])
     }
 
     // Configure IP route
-    struct hostent * host = gethostbyname(args[1]); // gets the hostname from the command line...?
-    unsigned int svrAddr = INADDR_ANY;
-    unsigned short svrPort = atoi(args[2]);
-    sin.sin_family = AF_INET;
-    sin.sin_addr.s_addr = svrAddr;
-    sin.sin_port = htons(svrPort);
+    struct hostent * host = gethostbyname(argv[1]); // gets the hostname from the command line...?
+    unsigned short svrPort = atoi(argv[2]);
+    configure_route(&sin, svrPort);
 
     // Bind the port
     if ((bind(cSock, (struct sockaddr *) &sin, sizeof(sin))) < 0)
@@ -33,11 +30,11 @@ int main(int argc, char *args[])
     // Listen for connections from client
     printf("Listening for incoming connections...\n");
     listen(cSock, 5);
-
+    // Insert accept and recv loop
     return 0;
 }
 
-void confClientAddr(struct sockaddr_in * clientAddr, int Port)
+void configure_route(struct sockaddr_in * clientAddr, unsigned short Port)
 {
     clientAddr->sin_family = AF_INET;
     clientAddr->sin_port = htons(Port);

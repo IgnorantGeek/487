@@ -1,4 +1,4 @@
-#include "udp_server.h"
+#include "udp_client.h"
 
 
 int main(int argc, char *args[])
@@ -13,7 +13,7 @@ int main(int argc, char *args[])
     if ((cSock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
         perror("Failed to create socket.\n");
-        abort();
+        exit(EXIT_FAILURE);
     }
 
     // Configure IP route
@@ -28,7 +28,7 @@ int main(int argc, char *args[])
     if (bind(cSock, (const struct sockaddr *) &sin, sizeof(sin)) < 0)
     {
         perror("Failed to bind socket.\n");
-        abort();
+        exit(EXIT_FAILURE);
     }
 
     // Send the datagram. Not sure how to do this part
