@@ -14,7 +14,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 
-// Header file for the server
+// Header file for the tcp server
 void configure_route(struct sockaddr_in * clientAddr, unsigned short Port);
 
 #endif

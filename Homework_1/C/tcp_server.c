@@ -26,14 +26,20 @@ int main(int argc, char **argv)
     // Bind the port
     if ((bind(server_socket, (struct sockaddr *) &server, sizeof(server))) < 0)
     {
-        perror("BIND ERROR: Failed to bind socket.");
+        perror("BIND ERROR: Failed to bind socket\n");
         exit(EXIT_FAILURE);
     }
 
     // Listen for connections from client
     printf("Listening for incoming connections...\n");
     listen(server_socket, 5);
-    
+
+    // Accept connection loop
+    while(1)
+    {
+        struct sockaddr client;
+        
+    }
     return 0;
 }
 
@@ -41,5 +47,5 @@ void configure_route(struct sockaddr_in * clientAddr, unsigned short Port)
 {
     clientAddr->sin_family = AF_INET;
     clientAddr->sin_port = htons(Port);
-    clientAddr->sin_addr.s_addr = INADDR_ANY; // Vulnerability? Should the user specify where the connection is coming from?
+    clientAddr->sin_addr.s_addr = INADDR_ANY; // Accept from any IP
 }
