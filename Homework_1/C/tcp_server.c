@@ -43,6 +43,9 @@ int main(int argc, char **argv)
         // Accept the connection
         int client_socket = accept(server_socket, &client_addr, &client_len);
 
+        // Log
+        printf("Acknowledgement recieved.\n");
+
         // Read the length from the first 4 bytes
         char packet_length_bytes[4];
         receive_bytes(client_socket, packet_length_bytes, 4);
@@ -56,8 +59,8 @@ int main(int argc, char **argv)
         printf("Message recieved from client: %s", buf);
 
         // Send back the response
-        // send(client_socket, packet_length_bytes, 4, 0);
-        // send(client_socket, buf, packet_length, 0);
+        send(client_socket, packet_length_bytes, 4, 0);
+        send(client_socket, buf, packet_length, 0);
 
         // release buffer
         free(buf);
@@ -80,9 +83,8 @@ void receive_one_byte(int client_socket, char *cur_char)
     ssize_t bytes_received = 0;
     while (bytes_received != 1)
     {
-    bytes_received = recv(client_socket, cur_char, 1, 0);
-    } 
-    return 1;
+        bytes_received = recv(client_socket, cur_char, 1, 0);
+    }
 }
 
 void receive_bytes(int client_socket, char * buffer, int length)
