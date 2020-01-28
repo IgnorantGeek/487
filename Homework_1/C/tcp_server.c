@@ -30,7 +30,7 @@ int main(int argc, char *args[])
         exit(EXIT_FAILURE);
     }
 
-    // Listen for incoming connections from client
+    // Listen for connections from client
     printf("Listening for incoming connections...\n");
     listen(cSock, 5);
 
