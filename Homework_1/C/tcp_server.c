@@ -3,25 +3,28 @@
 int main(int argc, char **argv)
 {
     // Initialize locals
-    int cSock;
+    int server_socket;
     char buffer[1024];
-    struct sockaddr_in sin;
-    memset(&sin, 0, sizeof(sin));
+    struct sockaddr_in server;
+    memset(&server, 0, sizeof(server));
 
     // Create the network socket
-    if ((cSock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         perror("SOCKET ERROR: Failed to create socket\n");
         exit(EXIT_FAILURE);
     }
 
     // Configure IP route
-    struct hostent * host = gethostbyname(argv[1]); // gets the hostname from the command line...?
-    unsigned short svrPort = atoi(argv[2]);
-    configure_route(&sin, svrPort);
+    if (argc == 2)
+    {
+        unsigned short svrPort = atoi(argv[1]);
+        configure_route(&server, svrPort);
+    } 
+    else configure_route(&server, DEF_PORT);
 
     // Bind the port
-    if ((bind(cSock, (struct sockaddr *) &sin, sizeof(sin))) < 0)
+    if ((bind(server_socket, (struct sockaddr *) &server, sizeof(server))) < 0)
     {
         perror("BIND ERROR: Failed to bind socket.");
         exit(EXIT_FAILURE);
@@ -29,8 +32,8 @@ int main(int argc, char **argv)
 
     // Listen for connections from client
     printf("Listening for incoming connections...\n");
-    listen(cSock, 5);
-    // Insert accept and recv loop
+    listen(server_socket, 5);
+    
     return 0;
 }
 

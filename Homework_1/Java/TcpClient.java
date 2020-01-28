@@ -29,7 +29,7 @@ public class TcpClient
         // convert the binary bytes to string
         String ret = new String(buf);
         // should be all upcases now
-        System.out.println(ret);
+        System.out.println("Message returned from server: " + ret);
 
         clientSocket.close();
     }
