@@ -1,4 +1,4 @@
-package Java;
+package Homework_1.Java;
 
 import java.io.*;
 import java.net.*;
@@ -24,7 +24,7 @@ public class TcpClient
         outStream.write(buf, 0, buf.length);
         outStream.flush();
         // read the data back
-        inStream.readFully(bufLengthInBinary); // ignore the first 4 bytes
+        //inStream.readFully(bufLengthInBinary); // ignore the first 4 bytes
         inStream.readFully(buf);
         // convert the binary bytes to string
         String ret = new String(buf);

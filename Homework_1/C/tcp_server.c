@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     }
 
     // Listen for connections from client
-    printf("Listening for incoming connections...\n");
+    printf("Listening for incoming connections....\n");
     listen(server_socket, 5);
 
     // Accept connection loop
@@ -44,23 +44,23 @@ int main(int argc, char **argv)
         int client_socket = accept(server_socket, &client_addr, &client_len);
 
         // Log
-        printf("Acknowledgement recieved.\n");
+        printf("Acknowledgement recieved. Reading transmission....\n");
 
         // Read the length from the first 4 bytes
         char packet_length_bytes[4];
         receive_bytes(client_socket, packet_length_bytes, 4);
-        int packet_length = toInteger32_le(packet_length_bytes);
+        int packet_length = toInteger32_be(packet_length_bytes);
 
         // Allocate buffer and read data
-        char * buf = (char *) malloc(packet_length);
+        char *buf = (char *) malloc(packet_length);
         receive_bytes(client_socket, buf, packet_length);
 
         // Log the message from the client
-        printf("Message recieved from client: %s", buf);
+        printf("Message recieved from client: %s\n", buf);
 
         // Send back the response
-        send(client_socket, packet_length_bytes, 4, 0);
-        send(client_socket, buf, packet_length, 0);
+        send(client_socket, "Message Recieved.\n", 19, 0);
+        // send(client_socket, buf, packet_length, 0);
 
         // release buffer
         free(buf);

@@ -34,5 +34,5 @@ release: CXXFLAGS += -O2
 release: all
 
 clean:
-	-@rm -rvf $(OBJ_DIR)/*
+	-@rm -rvf $(OBJ_DIR)
 	-@rm ./$(TARGET)
