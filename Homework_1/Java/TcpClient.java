@@ -25,13 +25,16 @@ public class TcpClient
         outStream.flush();
         // read the data back
         //inStream.readFully(bufLengthInBinary); // ignore the first 4 bytes
-        inStream.readFully(buf);
+        byte[] buf2 = "Message Recieved.\n".getBytes();
+        inStream.readFully(buf2);
         // convert the binary bytes to string
-        String ret = new String(buf);
+        String ret = new String(buf2);
         // should be all upcases now
         System.out.println("Message returned from server: " + ret);
 
         clientSocket.close();
+        inStream.close();
+        outStream.close();
     }
 
     static void printBinaryArray(byte[] b, String comment)
