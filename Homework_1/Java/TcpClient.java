@@ -32,9 +32,9 @@ public class TcpClient
         // should be all upcases now
         System.out.println("Message returned from server: " + ret);
 
-        clientSocket.close();
         inStream.close();
         outStream.close();
+        clientSocket.close();
     }
 
     static void printBinaryArray(byte[] b, String comment)
