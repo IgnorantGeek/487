@@ -16,8 +16,7 @@ public class TcpClient
 
         byte[] buf = args[0].getBytes();
         byte[] bufLengthInBinary = toBytes(buf.length);
-
-        printBinaryArray(bufLengthInBinary, "here");
+        
         // send 4 bytes
         outStream.write(bufLengthInBinary, 0, bufLengthInBinary.length);
         // send the string
