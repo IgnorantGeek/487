@@ -4,34 +4,25 @@
 int main(int argc, char *args[])
 {
     // Initialize locals
-    int cSock;
-    char buffer[1024];
-    struct sockaddr_in sin;
-    memset(&sin, 0, sizeof(sin));
+    int server_socket;
+    char buffer[20] = "Hello from client.\n";
+    struct sockaddr_in server_addr;
+    memset(&server_addr, 0, sizeof(server_addr));
 
     // Create the network socket
-    if ((cSock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    if ((server_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
         perror("Failed to create socket.\n");
         exit(EXIT_FAILURE);
     }
 
     // Configure IP route
-    struct hostent * host = gethostbyname(args[1]); // gets the hostname from the command line...?
-    unsigned int svrAddr = * (unsigned long * ) host->h_addr_list[0];
-    unsigned short svrPort = atoi(args[2]);
-    sin.sin_family = AF_INET;
-    sin.sin_addr.s_addr = svrAddr;
-    sin.sin_port = htons(svrPort);
+    configure_route_host(&server_addr, UDP_PORT, DEFAULT_HOST);
 
-    // Bind incoming port
-    if (bind(cSock, (const struct sockaddr *) &sin, sizeof(sin)) < 0)
-    {
-        perror("Failed to bind socket.\n");
-        exit(EXIT_FAILURE);
-    }
+    // Send payload
+    unsigned int n = sendto(server_socket, buffer, sizeof(buffer), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));
 
-    // Send the datagram. Not sure how to do this part
+    printf("Return code: %d\n", n);
 
     return 0;
 }

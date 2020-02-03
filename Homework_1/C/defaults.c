@@ -1,4 +1,4 @@
-#include "defaults.h";
+#include "defaults.h"
 
 void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, char * Hostname)
 {

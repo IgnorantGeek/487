@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <string.h>
 
 // Defaults header file
 
@@ -17,7 +18,8 @@
 #define TCP_PORT 51717
 #define UDP_PORT 51716
 
-void configure_route(struct sockaddr_in * clientAddr, unsigned short Port, char * Hostname);
+void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, char * Hostname);
+void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port);
 int toInteger32_le(char *bytes);
 int toInteger32_be(char *bytes);
 
