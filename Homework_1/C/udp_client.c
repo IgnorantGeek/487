@@ -35,3 +35,10 @@ int main(int argc, char *args[])
 
     return 0;
 }
+
+void configure_route(struct sockaddr_in * clientAddr, unsigned short Port)
+{
+    clientAddr->sin_family = AF_INET;
+    clientAddr->sin_port = htons(Port);
+    clientAddr->sin_addr.s_addr = INADDR_ANY; // Accept from any IP
+}
