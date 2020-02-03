@@ -1,10 +1,10 @@
 #include "defaults.h";
 
-void configure_route(struct sockaddr_in * clientAddr, unsigned short Port)
+void configure_route(struct sockaddr_in * clientAddr, unsigned short Port, char * Host)
 {
     clientAddr->sin_family = AF_INET;
     clientAddr->sin_port = htons(Port);
-    clientAddr->sin_addr.s_addr = INADDR_ANY; // Accept from any IP
+    clientAddr->sin_addr.s_addr = inet_addr(Host);
 }
 
 // Little Endian
