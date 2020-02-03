@@ -5,7 +5,7 @@ int main(int argc, char *args[])
 {
     // Initialize locals
     int server_socket;
-    char buffer[20] = "Hello from client.\n";
+    char buffer[] = "Hello from client.\n";
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
 

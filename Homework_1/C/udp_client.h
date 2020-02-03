@@ -5,4 +5,13 @@
 
 // header file for UDP
 
+struct BEACON
+{
+    int ID;
+    int StartUpTime;
+    int TimeInterval;
+    char IP[4];
+    int cmdPort;
+};
+
 #endif
