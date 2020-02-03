@@ -17,7 +17,7 @@
 #define TCP_PORT 51717
 #define UDP_PORT 51716
 
-void configure_route(struct sockaddr_in * clientAddr, unsigned short Port, char * Host);
+void configure_route(struct sockaddr_in * clientAddr, unsigned short Port, char * Hostname);
 int toInteger32_le(char *bytes);
 int toInteger32_be(char *bytes);
 

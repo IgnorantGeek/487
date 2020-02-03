@@ -18,9 +18,9 @@ int main(int argc, char **argv)
     if (argc == 2)
     {
         unsigned short svrPort = atoi(argv[1]);
-        configure_route(&server_addr, svrPort, DEFAULT_HOST);
+        configure_route_host(&server_addr, svrPort, DEFAULT_HOST);
     } 
-    else configure_route(&server_addr, TCP_PORT, DEFAULT_HOST);
+    else configure_route_host(&server_addr, TCP_PORT, DEFAULT_HOST);
 
     // Bind the port
     if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
