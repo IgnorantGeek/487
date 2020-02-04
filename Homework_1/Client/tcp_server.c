@@ -1,6 +1,6 @@
 #include "tcp_server.h"
 
-void * tcp_server(void * args)
+int main()
 {
     // Initialize locals
     int server_socket;
@@ -54,8 +54,10 @@ void * tcp_server(void * args)
         printf("Message recieved from client: %s\n", buf);
 
         // Send back the response
-        send(client_socket, "Message Recieved.\n", 19, 0);
-        // send(client_socket, buf, packet_length, 0);
+        char send_length_bytes[4];
+        to_bytes(send_length_bytes, sizeof("This is a longer message for testing.\n"));
+        send(client_socket, send_length_bytes, 4, 0);
+        send(client_socket, "This is a longer message for testing.\n", sizeof("This is a longer message for testing.\n"), 0);
 
         // release buffer
         free(buf);
@@ -63,6 +65,8 @@ void * tcp_server(void * args)
         // Remove me
         break;
     }
+
+    return 0;
 }
 
 void receive_one_byte(int client_socket, char *cur_char)

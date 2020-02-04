@@ -34,3 +34,11 @@ int toInteger32_be(char *bytes)
             bytes[3];
     return tmp;
 }
+
+void to_bytes(char bytes[4], size_t size)
+{
+    bytes[0] = (size >> 24) & 0xFF;
+    bytes[1] = (size >> 16) & 0xFF;
+    bytes[2] = (size >> 8) & 0xFF;
+    bytes[3] = size & 0xFF;
+}

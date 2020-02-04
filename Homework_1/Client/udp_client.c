@@ -1,7 +1,7 @@
 #include "udp_client.h"
 
 
-int main()
+void * udp_client()
 {
     // Initialize locals
     int server_socket;

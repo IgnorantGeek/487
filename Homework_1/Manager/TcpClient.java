@@ -23,8 +23,8 @@ public class TcpClient
         outStream.write(buf, 0, buf.length);
         outStream.flush();
         // read the data back
-        //inStream.readFully(bufLengthInBinary); // ignore the first 4 bytes
-        byte[] buf2 = "Message Recieved.\n".getBytes();
+        inStream.readFully(bufLengthInBinary);
+        byte[] buf2 = new byte[toInteger(bufLengthInBinary)];
         inStream.readFully(buf2);
         // convert the binary bytes to string
         String ret = new String(buf2);
@@ -54,5 +54,14 @@ public class TcpClient
         result[2] = (byte) (i >> 8);
         result[3] = (byte) (i /*>> 0*/);
         return result;
+    }
+
+    static private int toInteger(byte[] bytes)
+    {
+        int tmp = (bytes[0] << 24) + 
+            (bytes[1] << 16) + 
+            (bytes[2] << 8) + 
+            bytes[3];
+        return tmp;
     }
 }
