@@ -1,7 +1,7 @@
 #include "udp_client.h"
 
 
-void * udp_client()
+int main()
 {
     // Initialize locals
     int server_socket;
@@ -17,7 +17,7 @@ void * udp_client()
         exit(EXIT_FAILURE);
     }
 
-    char *IP[4] = {"127", "0", "0", "1"};
+    char IP[4][3] = {"127", "000", "000", "001"};
 
     configure_beacon(&send_beacon, 1, IP, 51716);
 
@@ -34,14 +34,18 @@ void * udp_client()
     return 0;
 }
 
-void configure_beacon(struct BEACON * beacon, int TimeInterval, char *IP[4], int cmdPort)
+void configure_beacon(struct BEACON * beacon, int TimeInterval, char IP[4][3], int cmdPort)
 {
+    srand(time(NULL));
     beacon->ID = rand();
     beacon->StartUpTime = time(NULL);
     beacon->TimeInterval = TimeInterval;
-    beacon->IP[0] = IP[0];
-    beacon->IP[1] = IP[1];
-    beacon->IP[2] = IP[2];
-    beacon->IP[3] = IP[3];
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            beacon->IP[i][j] = IP[i][j];
+        }
+    }
     beacon->cmdPort = cmdPort;
 }

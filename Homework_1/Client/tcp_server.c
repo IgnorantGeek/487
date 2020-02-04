@@ -1,6 +1,6 @@
 #include "tcp_server.h"
 
-int main()
+void * tcp_server()
 {
     // Initialize locals
     int server_socket;

@@ -23,6 +23,6 @@ void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, c
 void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port);
 int toInteger32_le(char *bytes);
 int toInteger32_be(char *bytes);
-void to_bytes(char bytes[4], size_t size);
+void to_bytes(char bytes[4], int32_t n);
 
 #endif

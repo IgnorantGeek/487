@@ -35,10 +35,10 @@ int toInteger32_be(char *bytes)
     return tmp;
 }
 
-void to_bytes(char bytes[4], size_t size)
+void to_bytes(char bytes[4], int32_t n)
 {
-    bytes[0] = (size >> 24) & 0xFF;
-    bytes[1] = (size >> 16) & 0xFF;
-    bytes[2] = (size >> 8) & 0xFF;
-    bytes[3] = size & 0xFF;
+    bytes[0] = (n >> 24) & 0xFF;
+    bytes[1] = (n >> 16) & 0xFF;
+    bytes[2] = (n >> 8) & 0xFF;
+    bytes[3] = n & 0xFF;
 }
