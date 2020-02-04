@@ -1,11 +1,10 @@
 #include "udp_client.h"
 
 
-int main(int argc, char *args[])
+int main()
 {
     // Initialize locals
     int server_socket;
-    char buffer[] = "Hello from client.\n";
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof(server_addr));
     struct BEACON send_beacon;
@@ -28,7 +27,7 @@ int main(int argc, char *args[])
     configure_route_host(&server_addr, UDP_PORT, DEFAULT_HOST);
 
     // Send payload
-    sendto(server_socket, buffer, sizeof(buffer), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));
+    sendto(server_socket, &send_beacon, sizeof(send_beacon), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));
 
     printf("Payload sent.\n");
 
