@@ -1,6 +1,6 @@
 #include "tcp_server.h"
 
-int main(int argc, char **argv)
+void * tcp_server(void * args)
 {
     // Initialize locals
     int server_socket;
@@ -13,14 +13,9 @@ int main(int argc, char **argv)
         perror("SOCKET ERROR: Failed to create socket\n");
         exit(EXIT_FAILURE);
     }
-
-    // Configure IP route
-    if (argc == 2)
-    {
-        unsigned short svrPort = atoi(argv[1]);
-        configure_route_host(&server_addr, svrPort, DEFAULT_HOST);
-    } 
-    else configure_route_host(&server_addr, TCP_PORT, DEFAULT_HOST);
+    
+    // Configure the route
+    configure_route_host(&server_addr, TCP_PORT, DEFAULT_HOST);
 
     // Bind the port
     if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
@@ -68,7 +63,6 @@ int main(int argc, char **argv)
         // Remove me
         break;
     }
-    return 0;
 }
 
 void receive_one_byte(int client_socket, char *cur_char)

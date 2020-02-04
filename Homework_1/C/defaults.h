@@ -10,6 +10,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
+#include <time.h>
 
 // Defaults header file
 
