@@ -14,6 +14,6 @@ struct BEACON
     int cmdPort;
 };
 
-void configure_beacon(struct BEACON * beacon, int ID, int TimeInterval, char *IP[4], int cmdPort);
+void configure_beacon(struct BEACON * beacon, int TimeInterval, char *IP[4], int cmdPort);
 
 #endif

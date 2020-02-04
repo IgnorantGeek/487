@@ -19,14 +19,14 @@ int main()
 
     char *IP[4] = {"127", "0", "0", "1"};
 
-    configure_beacon(&send_beacon, 1234, 1, IP, 51716);
+    configure_beacon(&send_beacon, 1, IP, 51716);
 
-    printf("Time value: %d\n", send_beacon.StartUpTime);
+    printf("Beacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
 
     // Configure IP route
     configure_route_host(&server_addr, UDP_PORT, DEFAULT_HOST);
 
-    // Send payload
+    // Send payload (need to serialize the beacon before we send it)
     sendto(server_socket, &send_beacon, sizeof(send_beacon), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr));
 
     printf("Payload sent.\n");
@@ -34,9 +34,9 @@ int main()
     return 0;
 }
 
-void configure_beacon(struct BEACON * beacon, int ID, int TimeInterval, char *IP[4], int cmdPort)
+void configure_beacon(struct BEACON * beacon, int TimeInterval, char *IP[4], int cmdPort)
 {
-    beacon->ID = ID;
+    beacon->ID = rand();
     beacon->StartUpTime = time(NULL);
     beacon->TimeInterval = TimeInterval;
     beacon->IP[0] = IP[0];
