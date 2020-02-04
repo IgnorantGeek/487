@@ -1,4 +1,4 @@
-package Homework_1.Java;
+package Homework_1.Manager;
 
 import java.io.*;
 import java.net.*;
