@@ -13,7 +13,7 @@ int main()
     // Create the network socket
     if ((server_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
-        perror("Failed to create socket.\n");
+        perror("SOCKET ERROR: Failed to create socket\n");
         exit(EXIT_FAILURE);
     }
 
