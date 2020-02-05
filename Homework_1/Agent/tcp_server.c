@@ -1,14 +1,30 @@
 #include "tcp_server.h"
 
 // Listen for a command from the manager over TCP
-void * cmd_listen(void * args)
+int main()
 {
     // Initialize locals
     int server_socket;
-    struct sockaddr_in client_addr;
+    struct sockaddr_in server_addr;
 
-    // Initialize the socket
-    initialize_tcp_server(server_socket, client_addr, DEFAULT_HOST);
+    // set the sockaddr_in struct to 0
+    memset(&server_addr, 0, sizeof(server_addr));
+
+    // Create the socket
+    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    {
+        perror("SOCKET ERROR: Failed to create socket\n");
+        exit(EXIT_FAILURE);
+    }
+
+    configure_route_host(&server_addr, TCP_PORT, DEFAULT_HOST);
+
+    // Bind the port
+    if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
+    {
+        perror("BIND ERROR: Failed to bind socket\n");
+        exit(EXIT_FAILURE);
+    }
 
     // Listen for connections from client
     printf("Listening for incoming connections....\n");
@@ -48,6 +64,7 @@ void * cmd_listen(void * args)
 
         // release buffer
         free(buf);
+        printf("Listening for new connection....\n");
     }
 
     return 0;
@@ -73,27 +90,5 @@ void receive_bytes(int client_socket, char * buffer, int n)
         receive_one_byte(client_socket, cur_char);
         cur_char++;
         bytes_received++;
-    }
-}
-
-void initialize_tcp_server(int socket_fd, struct sockaddr_in server_addr, char * host)
-{
-    // set the sockaddr_in struct to 0
-    memset(&server_addr, 0, sizeof(server_addr));
-
-    // Create the socket
-    if (socket_fd = socket(AF_INET, SOCK_STREAM, 0) < 0)
-    {
-        perror("SOCKET ERROR: Failed to create socket\n");
-        exit(EXIT_FAILURE);
-    }
-
-    configure_route_host(&server_addr, TCP_PORT, host);
-
-    // Bind the port
-    if ((bind(socket_fd, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
-    {
-        perror("BIND ERROR: Failed to bind socket\n");
-        exit(EXIT_FAILURE);
     }
 }

@@ -3,9 +3,9 @@ package Homework_1.Manager;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class UdpServer extends Thread
+public class BeaconListener extends Thread
 {
-    public static void main(String[] args)
+    public void run()
     {
         try
         {    

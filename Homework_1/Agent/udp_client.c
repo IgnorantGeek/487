@@ -77,18 +77,3 @@ void serialize_beacon(struct BEACON * beacon, char buffer[20])
     int_to_bytes(int_buf, beacon->cmdPort);
     memcpy(buffer + 16, int_buf, 4);
 }
-
-void initialize_udp_client(int socket_fd, struct sockaddr_in client_addr, char * host)
-{
-    // set the sockaddr_in struct to 0
-    memset(&client_addr, 0, sizeof(client_addr));
-
-    // Create the socket
-    if (socket_fd = socket(AF_INET, SOCK_DGRAM, 0) < 0)
-    {
-        perror("SOCKET ERROR: Failed to create socket\n");
-        exit(EXIT_FAILURE);
-    }
-
-    configure_route_host(&client_addr, TCP_PORT, host);
-}

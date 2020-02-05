@@ -4,38 +4,47 @@ import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 
-public class TcpClient
+public class TcpClient extends Thread
 {
-    public static void main(String[] args) throws IOException
+    public void run()
     {
-        String servIP = "127.0.0.1";
+        try
+        {
+            String servIP = "127.0.0.1";
 
-        Socket clientSocket = new Socket(servIP, 51717);
+            Socket clientSocket = new Socket(servIP, 51717);
 
-        DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
-        DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
+            DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
+            DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
 
-        byte[] buf = args[0].getBytes();
-        byte[] bufLengthInBinary = toBytes(buf.length);
-        
-        // send 4 bytes
-        outStream.write(bufLengthInBinary, 0, bufLengthInBinary.length);
-        // send the string
-        outStream.write(buf, 0, buf.length);
-        outStream.flush();
-        // read the data back
-        inStream.readFully(bufLengthInBinary);
-        byte[] buf2 = new byte[toInteger(bufLengthInBinary)];
-        System.out.println(toInteger(bufLengthInBinary));
-        inStream.readFully(buf2);
-        // convert the binary bytes to string
-        String ret = new String(buf2);
-        // should be all upcases now
-        System.out.println("Message returned from server: " + ret);
+            String message = "Message to send to server.";
 
-        inStream.close();
-        outStream.close();
-        clientSocket.close();
+            byte[] buf = message.getBytes();
+            byte[] bufLengthInBinary = toBytes(buf.length);
+            
+            // send 4 bytes
+            outStream.write(bufLengthInBinary, 0, bufLengthInBinary.length);
+            // send the string
+            outStream.write(buf, 0, buf.length);
+            outStream.flush();
+            // read the data back
+            inStream.readFully(bufLengthInBinary);
+            byte[] buf2 = new byte[toInteger(bufLengthInBinary)];
+            System.out.println(toInteger(bufLengthInBinary));
+            inStream.readFully(buf2);
+            // convert the binary bytes to string
+            String ret = new String(buf2);
+            // should be all upcases now
+            System.out.println("Message returned from server: " + ret);
+
+            inStream.close();
+            outStream.close();
+            clientSocket.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 
     static void printBinaryArray(byte[] b, String comment)
