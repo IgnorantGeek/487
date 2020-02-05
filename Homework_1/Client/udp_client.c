@@ -58,12 +58,13 @@ void configure_beacon(struct BEACON * beacon, int TimeInterval, char IP[4][3], i
 void serialize_beacon(struct BEACON * beacon, char buffer[28])
 {
     // Initialize a buffer for the numbers
-    unsigned char int_buf[4];
+    char int_buf[4];
     memset(int_buf, 0, 4);
 
     // Serialize ID
     to_bytes(int_buf, beacon->ID);
     memcpy(buffer, int_buf, 4);
+    printf("buffer value: %d\n", toInteger32_be(int_buf));
     memset(int_buf, 0, 4);
 
     // Serialize Startup
