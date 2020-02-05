@@ -20,9 +20,27 @@ public class UdpServer extends Thread
                 buf[i] = data[i];
             }
             int BeaconID = TcpClient.toInteger(buf);
+            for (int i = 0; i < 4; i++)
+            {
+                buf[i] = data[i+4];
+            }
+            int StartupTime = TcpClient.toInteger(buf);
+            for (int i = 0; i < 4; i++)
+            {
+                buf[i] = data[i+8];
+            }
+            int Interval = TcpClient.toInteger(buf);
+            for (int i = 0; i < 4; i++)
+            {
+                buf[i] = data[i+24];
+            }
+            int cmdPort = TcpClient.toInteger(buf);
             System.out.println("Port: " +  packet.getPort()  +
                                         " on "  +  packet.getAddress()  +
-                                        "\nBeacon recieved with ID: " + BeaconID);
+                                        "\nBeacon ID: " + BeaconID +
+                                        "\nClient Startup Time: " + StartupTime +
+                                        "\nBeacon Interval: " + Interval +
+                                        "\nCommand Port: " + cmdPort + '\n');
 
             socket.close();
         }

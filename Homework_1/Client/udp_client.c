@@ -64,7 +64,6 @@ void serialize_beacon(struct BEACON * beacon, char buffer[28])
     // Serialize ID
     to_bytes(int_buf, beacon->ID);
     memcpy(buffer, int_buf, 4);
-    printf("buffer value: %d\n", toInteger32_be(int_buf));
     memset(int_buf, 0, 4);
 
     // Serialize Startup
