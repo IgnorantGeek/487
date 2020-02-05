@@ -17,7 +17,9 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    unsigned char IP[4] = {127,0,0,1};
+    unsigned char IP[4];
+
+    ip4_to_bytes(IP, DEFAULT_HOST);
 
     configure_beacon(&send_beacon, 1, IP, 51717);
 
@@ -27,7 +29,7 @@ int main()
     configure_route_host(&server_addr, UDP_PORT, DEFAULT_HOST);
 
     // Serialize the beacon for transfer
-    char serial_buffer[28];
+    char serial_buffer[20];
     serialize_beacon(&send_beacon, serial_buffer);
 
     // Send payload (need to serialize the beacon before we send it)
@@ -56,24 +58,21 @@ void serialize_beacon(struct BEACON * beacon, char buffer[20])
     memset(int_buf, 0, 4);
 
     // Serialize ID
-    to_bytes(int_buf, beacon->ID);
+    int_to_bytes(int_buf, beacon->ID);
     memcpy(buffer, int_buf, 4);
-    memset(int_buf, 0, 4);
 
     // Serialize Startup
-    to_bytes(int_buf, beacon->StartUpTime);
+    int_to_bytes(int_buf, beacon->StartUpTime);
     memcpy(buffer + 4, int_buf, 4);
-    memset(int_buf, 0, 4);
 
     // Serialize Interval
-    to_bytes(int_buf, beacon->TimeInterval);
+    int_to_bytes(int_buf, beacon->TimeInterval);
     memcpy(buffer + 8, int_buf, 4);
-    memset(int_buf, 0, 4);
 
     // Serialize IP
     memcpy(buffer + 12, beacon->IP, 4);
 
     // Serialize CmdPort
-    to_bytes(int_buf, beacon->cmdPort);
+    int_to_bytes(int_buf, beacon->cmdPort);
     memcpy(buffer + 16, int_buf, 4);
 }

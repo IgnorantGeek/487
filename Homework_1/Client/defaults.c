@@ -18,10 +18,9 @@ void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port)
 int toInteger32_le(char *bytes)
 {
     int tmp = bytes[0] +
-            (bytes[1] << 8) + 
-            (bytes[2] << 16) + 
-            (bytes[3] << 24);
-    
+            (bytes[1] << 8) +
+            (bytes[2] << 16) +
+            (bytes[3] << 24);    
     return tmp;
 }
 
@@ -35,10 +34,15 @@ int toInteger32_be(char *bytes)
     return tmp;
 }
 
-void to_bytes(char bytes[4], int32_t n)
+void int_to_bytes(char bytes[4], int32_t n)
 {
     bytes[0] = (n >> 24) & 0xFF;
     bytes[1] = (n >> 16) & 0xFF;
     bytes[2] = (n >> 8) & 0xFF;
     bytes[3] = n & 0xFF;
+}
+
+void ip4_to_bytes(unsigned char buffer[4], char * ip_addr)
+{
+    sscanf(ip_addr, "%d.%d.%d.%d", &buffer[0], &buffer[1], &buffer[2], &buffer[3]);
 }

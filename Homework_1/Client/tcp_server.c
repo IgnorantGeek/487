@@ -56,7 +56,7 @@ void * tcp_server()
         // Send back the response
         char send_length_bytes[4];
         char buffer[44] = "this is the message to send back to client.";
-        to_bytes(send_length_bytes, sizeof(buffer));
+        int_to_bytes(send_length_bytes, sizeof(buffer));
         send(client_socket, send_length_bytes, 4, 0);
         send(client_socket, buffer, sizeof(buffer), 0);
 

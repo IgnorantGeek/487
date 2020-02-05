@@ -42,13 +42,11 @@ public class UdpServer extends Thread
                 buf[i] = data[i+16];
             }
             int cmdPort = TcpClient.toInteger(buf);
-            System.out.println("Port: " +  packet.getPort()  +
-                                        " on "  +  packet.getAddress()  +
-                                        "\nBeacon ID: " + BeaconID +
-                                        "\nClient Startup Time: " + StartupTime +
-                                        "\nBeacon Interval: " + Interval +
-                                        "\nClient IP: " + ip[0] + "." + ip[1] + "." + ip[2] + "." + ip[3] +
-                                        "\nCommand Port: " + cmdPort + '\n');
+            UdpBeacon beacon = new UdpBeacon(BeaconID, StartupTime, Interval, cmdPort, ip);
+            System.out.println("Packets recieved at Port: " +  packet.getPort()  +
+                                        " on "  +  packet.getAddress());
+
+            beacon.print();
 
             socket.close();
         }
