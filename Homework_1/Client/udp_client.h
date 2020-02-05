@@ -15,5 +15,6 @@ struct BEACON
 };
 
 void configure_beacon(struct BEACON * beacon, int TimeInterval, char IP[4][3], int cmdPort);
+void serialize_beacon(struct BEACON * beacon, char buffer[28]);
 
 #endif

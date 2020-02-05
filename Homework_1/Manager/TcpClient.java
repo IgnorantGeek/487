@@ -56,7 +56,7 @@ public class TcpClient
         return result;
     }
 
-    static private int toInteger(byte[] bytes)
+    public static int toInteger(byte[] bytes)
     {
         int tmp = (bytes[0] << 24) + 
             (bytes[1] << 16) + 

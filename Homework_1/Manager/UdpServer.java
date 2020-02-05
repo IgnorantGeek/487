@@ -5,7 +5,7 @@ import java.net.DatagramSocket;
 
 public class UdpServer extends Thread
 {
-    public void run()
+    public static void main(String[] args)
     {
         try
         {    
@@ -14,10 +14,15 @@ public class UdpServer extends Thread
             DatagramSocket socket = new DatagramSocket(51716);
             socket.receive(packet);
             byte[] data = packet.getData();
-            String s = new String(data, 0, packet.getLength());
+            byte[] ID = new byte[4];
+            for (int i = 0; i < 4; i++)
+            {
+                ID[i] = data[i];
+            }
+            int s = TcpClient.toInteger(ID);
             System.out.println("Port: " +  packet.getPort()  +
                                         " on "  +  packet.getAddress()  +
-                                        " sent this message: ");
+                                        " beacon recieved with ID: ");
             System.out.println(s);
 
             socket.close();
