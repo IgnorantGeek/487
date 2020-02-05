@@ -22,8 +22,7 @@ public class UdpServer extends Thread
             int s = TcpClient.toInteger(ID);
             System.out.println("Port: " +  packet.getPort()  +
                                         " on "  +  packet.getAddress()  +
-                                        " beacon recieved with ID: ");
-            System.out.println(s);
+                                        "\nBeacon recieved with ID: " + s);
 
             socket.close();
         }

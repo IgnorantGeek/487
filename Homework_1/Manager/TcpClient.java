@@ -2,6 +2,7 @@ package Homework_1.Manager;
 
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 
 public class TcpClient
 {
@@ -59,10 +60,7 @@ public class TcpClient
 
     public static int toInteger(byte[] bytes)
     {
-        int tmp = (bytes[0] << 24) + 
-            (bytes[1] << 16) + 
-            (bytes[2] << 8) + 
-            bytes[3];
-        return tmp;
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        return bb.getInt();
     }
 }
