@@ -17,7 +17,7 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    char IP[4][3] = {"127", "000", "000", "001"};
+    unsigned char IP[4] = {127,0,0,1};
 
     configure_beacon(&send_beacon, 1, IP, 51717);
 
@@ -38,24 +38,18 @@ int main()
     return 0;
 }
 
-void configure_beacon(struct BEACON * beacon, int TimeInterval, char IP[4][3], int cmdPort)
+void configure_beacon(struct BEACON * beacon, int TimeInterval, unsigned char IP[4], int cmdPort)
 {
     srand(time(NULL));
     beacon->ID = rand();
     beacon->StartUpTime = time(NULL);
     beacon->TimeInterval = TimeInterval;
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            beacon->IP[i][j] = IP[i][j];
-        }
-    }
+    memcpy(beacon->IP, IP, 4);
     beacon->cmdPort = cmdPort;
 }
 
 // Untested
-void serialize_beacon(struct BEACON * beacon, char buffer[28])
+void serialize_beacon(struct BEACON * beacon, char buffer[20])
 {
     // Initialize a buffer for the numbers
     char int_buf[4];
@@ -77,12 +71,9 @@ void serialize_beacon(struct BEACON * beacon, char buffer[28])
     memset(int_buf, 0, 4);
 
     // Serialize IP
-    memcpy(buffer + 12, beacon->IP[0], 3);
-    memcpy(buffer + 15, beacon->IP[1], 3);
-    memcpy(buffer + 18, beacon->IP[2], 3);
-    memcpy(buffer + 21, beacon->IP[3], 3);
+    memcpy(buffer + 12, beacon->IP, 4);
 
     // Serialize CmdPort
     to_bytes(int_buf, beacon->cmdPort);
-    memcpy(buffer + 24, int_buf, 4);
+    memcpy(buffer + 16, int_buf, 4);
 }

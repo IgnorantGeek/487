@@ -10,11 +10,11 @@ struct BEACON
     int ID;
     int StartUpTime;
     int TimeInterval;
-    char IP[4][3];
+    unsigned char IP[4];
     int cmdPort;
 };
 
-void configure_beacon(struct BEACON * beacon, int TimeInterval, char IP[4][3], int cmdPort);
-void serialize_beacon(struct BEACON * beacon, char buffer[28]);
+void configure_beacon(struct BEACON * beacon, int TimeInterval, unsigned char IP[4], int cmdPort);
+void serialize_beacon(struct BEACON * beacon, char buffer[20]);
 
 #endif
