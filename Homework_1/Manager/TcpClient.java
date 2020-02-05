@@ -60,7 +60,6 @@ public class TcpClient
 
     public static int toInteger(byte[] bytes)
     {
-        ByteBuffer bb = ByteBuffer.wrap(bytes);
-        return bb.getInt();
+        return ByteBuffer.wrap(bytes).getInt();
     }
 }

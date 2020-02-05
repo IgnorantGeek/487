@@ -14,15 +14,15 @@ public class UdpServer extends Thread
             DatagramSocket socket = new DatagramSocket(51716);
             socket.receive(packet);
             byte[] data = packet.getData();
-            byte[] ID = new byte[4];
+            byte[] buf = new byte[4];
             for (int i = 0; i < 4; i++)
             {
-                ID[i] = data[i];
+                buf[i] = data[i];
             }
-            int s = TcpClient.toInteger(ID);
+            int BeaconID = TcpClient.toInteger(buf);
             System.out.println("Port: " +  packet.getPort()  +
                                         " on "  +  packet.getAddress()  +
-                                        "\nBeacon recieved with ID: " + s);
+                                        "\nBeacon recieved with ID: " + BeaconID);
 
             socket.close();
         }
