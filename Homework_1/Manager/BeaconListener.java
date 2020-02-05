@@ -2,9 +2,17 @@ package Homework_1.Manager;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.ArrayList;
 
 public class BeaconListener extends Thread
 {
+    public ArrayList<UdpBeacon> agents;
+
+    public BeaconListener(ArrayList<UdpBeacon> agents)
+    {
+        this.agents = agents;
+    }
+
     public void run()
     {
         try
@@ -19,17 +27,17 @@ public class BeaconListener extends Thread
             {
                 buf[i] = data[i];
             }
-            int BeaconID = TcpClient.toInteger(buf);
+            int BeaconID = Main.toInteger(buf);
             for (int i = 0; i < 4; i++)
             {
                 buf[i] = data[i+4];
             }
-            int StartupTime = TcpClient.toInteger(buf);
+            int StartupTime = Main.toInteger(buf);
             for (int i = 0; i < 4; i++)
             {
                 buf[i] = data[i+8];
             }
-            int Interval = TcpClient.toInteger(buf);
+            int Interval = Main.toInteger(buf);
             int[] ip = new int[4];
             for (int i = 0; i < 4; i++)
             {
@@ -41,7 +49,7 @@ public class BeaconListener extends Thread
             {
                 buf[i] = data[i+16];
             }
-            int cmdPort = TcpClient.toInteger(buf);
+            int cmdPort = Main.toInteger(buf);
             UdpBeacon beacon = new UdpBeacon(BeaconID, StartupTime, Interval, cmdPort, ip);
             System.out.println("Packets recieved at Port: " +  packet.getPort()  +
                                         " on "  +  packet.getAddress());

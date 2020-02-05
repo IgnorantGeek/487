@@ -2,9 +2,8 @@ package Homework_1.Manager;
 
 import java.io.*;
 import java.net.*;
-import java.nio.ByteBuffer;
 
-public class TcpClient extends Thread
+public class CmdAgent extends Thread
 {
     public void run()
     {
@@ -29,8 +28,8 @@ public class TcpClient extends Thread
             outStream.flush();
             // read the data back
             inStream.readFully(bufLengthInBinary);
-            byte[] buf2 = new byte[toInteger(bufLengthInBinary)];
-            System.out.println(toInteger(bufLengthInBinary));
+            byte[] buf2 = new byte[Main.toInteger(bufLengthInBinary)];
+            System.out.println(Main.toInteger(bufLengthInBinary));
             inStream.readFully(buf2);
             // convert the binary bytes to string
             String ret = new String(buf2);
@@ -65,10 +64,5 @@ public class TcpClient extends Thread
         result[2] = (byte) (i >> 8);
         result[3] = (byte) (i /*>> 0*/);
         return result;
-    }
-
-    public static int toInteger(byte[] bytes)
-    {
-        return ByteBuffer.wrap(bytes).getInt();
     }
 }
