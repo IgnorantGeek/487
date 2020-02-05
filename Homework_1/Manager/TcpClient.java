@@ -25,6 +25,7 @@ public class TcpClient
         // read the data back
         inStream.readFully(bufLengthInBinary);
         byte[] buf2 = new byte[toInteger(bufLengthInBinary)];
+        System.out.println(toInteger(bufLengthInBinary));
         inStream.readFully(buf2);
         // convert the binary bytes to string
         String ret = new String(buf2);

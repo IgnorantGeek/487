@@ -58,7 +58,7 @@ void configure_beacon(struct BEACON * beacon, int TimeInterval, char IP[4][3], i
 void serialize_beacon(struct BEACON * beacon, char buffer[28])
 {
     // Initialize a buffer for the numbers
-    char int_buf[4];
+    unsigned char int_buf[4];
     memset(int_buf, 0, 4);
 
     // Serialize ID
@@ -68,21 +68,21 @@ void serialize_beacon(struct BEACON * beacon, char buffer[28])
 
     // Serialize Startup
     to_bytes(int_buf, beacon->StartUpTime);
-    memcpy(buffer, int_buf, 4);
+    memcpy(buffer + 4, int_buf, 4);
     memset(int_buf, 0, 4);
 
     // Serialize Interval
     to_bytes(int_buf, beacon->TimeInterval);
-    memcpy(buffer, int_buf, 4);
+    memcpy(buffer + 8, int_buf, 4);
     memset(int_buf, 0, 4);
 
     // Serialize IP
-    memcpy(buffer, beacon->IP[0], 3);
-    memcpy(buffer, beacon->IP[1], 3);
-    memcpy(buffer, beacon->IP[2], 3);
-    memcpy(buffer, beacon->IP[3], 3);
+    memcpy(buffer + 12, beacon->IP[0], 3);
+    memcpy(buffer + 15, beacon->IP[1], 3);
+    memcpy(buffer + 18, beacon->IP[2], 3);
+    memcpy(buffer + 21, beacon->IP[3], 3);
 
     // Serialize CmdPort
     to_bytes(int_buf, beacon->cmdPort);
-    memcpy(buffer, int_buf, 4);
+    memcpy(buffer + 24, int_buf, 4);
 }
