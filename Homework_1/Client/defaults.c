@@ -1,5 +1,6 @@
 #include "defaults.h"
 
+// Configure the socket route with a host
 void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, char * Hostname)
 {
     routeAddr->sin_family = AF_INET;
@@ -7,6 +8,7 @@ void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, c
     routeAddr->sin_addr.s_addr = inet_addr(Hostname);
 }
 
+// Configure the socket route with any in address (for testing)
 void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port)
 {
     routeAddr->sin_family = AF_INET;
@@ -34,6 +36,7 @@ int toInteger32_be(char *bytes)
     return tmp;
 }
 
+// Convert a 32 bit integer to bytes
 void int_to_bytes(char bytes[4], int32_t n)
 {
     bytes[0] = (n >> 24) & 0xFF;
@@ -42,6 +45,7 @@ void int_to_bytes(char bytes[4], int32_t n)
     bytes[3] = n & 0xFF;
 }
 
+// Convert an ip as a string to 4 bytes
 void ip4_to_bytes(unsigned char buffer[4], char * ip_addr)
 {
     sscanf(ip_addr, "%d.%d.%d.%d", &buffer[0], &buffer[1], &buffer[2], &buffer[3]);

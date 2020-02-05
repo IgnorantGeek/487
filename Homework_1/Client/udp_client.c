@@ -1,7 +1,7 @@
 #include "udp_client.h"
 
 
-int main()
+void * send_beacon(void * arguments)
 {
     // Initialize locals
     int server_socket;
@@ -40,6 +40,7 @@ int main()
     return 0;
 }
 
+// Constructor for the beacon struct
 void configure_beacon(struct BEACON * beacon, int TimeInterval, unsigned char IP[4], int cmdPort)
 {
     srand(time(NULL));
@@ -50,7 +51,7 @@ void configure_beacon(struct BEACON * beacon, int TimeInterval, unsigned char IP
     beacon->cmdPort = cmdPort;
 }
 
-// Untested
+// Convert the beacon into a 20 byte message for UDP transport
 void serialize_beacon(struct BEACON * beacon, char buffer[20])
 {
     // Initialize a buffer for the numbers

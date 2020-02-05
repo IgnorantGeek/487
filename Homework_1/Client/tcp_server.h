@@ -4,7 +4,9 @@
 #include "./defaults.h"
 
 // Header file for the tcp server
+
+
 void receive_one_byte(int client_socket, char *cur_char);
-void receive_bytes(int client_socket, char * buffer, int length);
+void receive_bytes(int client_socket, char * buffer, int n);
 
 #endif

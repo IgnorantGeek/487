@@ -62,14 +62,12 @@ void * tcp_server()
 
         // release buffer
         free(buf);
-
-        // Remove me
-        break;
     }
 
     return 0;
 }
 
+// Recieve a single byte from the socket
 void receive_one_byte(int client_socket, char *cur_char)
 {
     ssize_t bytes_received = 0;
@@ -79,11 +77,12 @@ void receive_one_byte(int client_socket, char *cur_char)
     }
 }
 
-void receive_bytes(int client_socket, char * buffer, int length)
+// Recieve n bytes from the socket into a buffer
+void receive_bytes(int client_socket, char * buffer, int n)
 {
     char *cur_char = buffer;
     ssize_t bytes_received = 0;
-    while (bytes_received != length)
+    while (bytes_received != n)
     {
         receive_one_byte(client_socket, cur_char);
         cur_char++;
