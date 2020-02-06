@@ -1,7 +1,7 @@
 #include "udp_client.h"
 
-
-void * send_beacon(void * arguments)
+// Creates a beacon, and sends it to the server every minute.
+void * send_beacon(void * args)
 {
     // Initialize locals
     int server_socket;
@@ -13,7 +13,7 @@ void * send_beacon(void * arguments)
     // Create the network socket
     if ((server_socket = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
-        perror("SOCKET ERROR: Failed to create socket\n");
+        perror("SOCKET ERROR: Failed to create UDP socket\n");
         exit(EXIT_FAILURE);
     }
 
@@ -23,7 +23,7 @@ void * send_beacon(void * arguments)
 
     configure_beacon(&send_beacon, 1, IP, 51717);
 
-    printf("Beacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
+    printf("UDP socket created.\nBeacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
 
     // Configure IP route
     configure_route_host(&client_addr, UDP_PORT, DEFAULT_HOST);
@@ -32,10 +32,18 @@ void * send_beacon(void * arguments)
     char serial_buffer[20];
     serialize_beacon(&send_beacon, serial_buffer);
 
-    // Send payload (need to serialize the beacon before we send it)
+    // Send first payload
     sendto(server_socket, &serial_buffer, sizeof(serial_buffer), MSG_CONFIRM, (const struct sockaddr *) &client_addr, sizeof(client_addr));
 
     printf("Payload sent.\n");
+
+    // Send another beacon every x minutes, specified by the TimeInterval in the beacon
+    while (1)
+    {
+        sleep(send_beacon.TimeInterval * 60);
+        sendto(server_socket, &serial_buffer, sizeof(serial_buffer), MSG_CONFIRM, (const struct sockaddr *) &client_addr, sizeof(client_addr));
+        printf("Payload sent.\n");
+    }
 
     return 0;
 }

@@ -5,7 +5,7 @@ import java.net.*;
 
 public class CmdAgent extends Thread
 {
-    public void run()
+    public static void main(String[] args)
     {
         try
         {

@@ -1,7 +1,7 @@
 #include "tcp_server.h"
 
 // Listen for a command from the manager over TCP
-int main()
+void * cmd_listen(void * args)
 {
     // Initialize locals
     int server_socket;
@@ -13,7 +13,7 @@ int main()
     // Create the socket
     if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        perror("SOCKET ERROR: Failed to create socket\n");
+        perror("SOCKET ERROR: Failed to create TCP socket\n");
         exit(EXIT_FAILURE);
     }
 
@@ -22,12 +22,12 @@ int main()
     // Bind the port
     if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
     {
-        perror("BIND ERROR: Failed to bind socket\n");
+        perror("BIND ERROR: Failed to bind TCP socket\n");
         exit(EXIT_FAILURE);
     }
 
     // Listen for connections from client
-    printf("Listening for incoming connections....\n");
+    printf("TCP socket created. Listening for incoming connections....\n");
     listen(server_socket, 5);
 
     // Accept connection loop
