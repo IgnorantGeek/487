@@ -23,7 +23,7 @@ void * send_beacon(void * args)
 
     configure_beacon(&send_beacon, 1, IP, 51717);
 
-    printf("UDP socket created.\nBeacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
+    printf("UDP-CLIENT: socket created.\nUDP Beacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
 
     // Configure IP route
     configure_route_host(&client_addr, UDP_PORT, DEFAULT_HOST);
@@ -35,14 +35,14 @@ void * send_beacon(void * args)
     // Send first payload
     sendto(server_socket, &serial_buffer, sizeof(serial_buffer), MSG_CONFIRM, (const struct sockaddr *) &client_addr, sizeof(client_addr));
 
-    printf("Payload sent.\n");
+    printf("UDP-CLIENT: Beacon sent.\n");
 
     // Send another beacon every x minutes, specified by the TimeInterval in the beacon
     while (1)
     {
         sleep(send_beacon.TimeInterval * 60);
         sendto(server_socket, &serial_buffer, sizeof(serial_buffer), MSG_CONFIRM, (const struct sockaddr *) &client_addr, sizeof(client_addr));
-        printf("Payload sent.\n");
+        printf("UDP-CLIENT: Beacon sent.\n");
     }
 
     return 0;

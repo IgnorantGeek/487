@@ -27,7 +27,7 @@ void * cmd_listen(void * args)
     }
 
     // Listen for connections from client
-    printf("TCP socket created. Listening for incoming connections....\n");
+    printf("TCP-SERVER: socket created. Listening for incoming connections....\n");
     listen(server_socket, 5);
 
     // Accept connection loop
@@ -41,7 +41,7 @@ void * cmd_listen(void * args)
         int client_socket = accept(server_socket, &client_addr, &client_len);
 
         // Log
-        printf("Acknowledgement recieved. Reading transmission....\n");
+        printf("TCP-SERVER: Acknowledgement recieved. Reading transmission....\n");
 
         // Read the length from the first 4 bytes
         char packet_length_bytes[4];
@@ -53,7 +53,7 @@ void * cmd_listen(void * args)
         receive_bytes(client_socket, buf, packet_length);
 
         // Log the message from the client
-        printf("Message recieved from client: %s\n", buf);
+        printf("TCP-SERVER: Message recieved from client: %s\n", buf);
 
         // Send back the response
         char send_length_bytes[4];
@@ -64,7 +64,7 @@ void * cmd_listen(void * args)
 
         // release buffer
         free(buf);
-        printf("Listening for new connection....\n");
+        printf("TCP-SERVER: Listening for new connection....\n");
     }
 
     return 0;
