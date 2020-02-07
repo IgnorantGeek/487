@@ -7,7 +7,7 @@ public class Main
 {
     public static void main(String[] args)
     {
-        ArrayList<UdpBeacon> agents = new ArrayList<UdpBeacon>();
+        ArrayList<Agent> agents = new ArrayList<Agent>();
         AgentMonitor monitor = new AgentMonitor(agents);
         BeaconListener listener = new BeaconListener(agents);
 

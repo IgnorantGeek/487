@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 public class BeaconListener extends Thread
 {
-    public ArrayList<UdpBeacon> agents;
+    public ArrayList<Agent> agents;
 
-    public BeaconListener(ArrayList<UdpBeacon> agents)
+    public BeaconListener(ArrayList<Agent> agents)
     {
         this.agents = agents;
     }
@@ -27,21 +27,22 @@ public class BeaconListener extends Thread
                 byte[] data = packet.getData();
                 UdpBeacon beacon = decodeBeacon(data);
                 boolean newBeacon = true;
-                for (UdpBeacon agent : this.agents)
+                for (Agent agent : this.agents)
                 {
-                    if (agent.compareTo(beacon))
+                    if (agent.beacon.compareTo(beacon))
                     {
+                        // Update this check in time
+                        agent.updateCheckIn();
                         newBeacon = false;
+                        System.out.println("Beacon recieved. Agent arrival time updated.");
                     }
                 }
                 if (newBeacon)
                 {
-                    beacon.print();
-                    agents.add(beacon);
-                }
-                else
-                {
-                    System.out.println("Beacon time update.");
+                    System.out.println("New agent added.");
+                    Agent hold = new Agent(beacon);
+                    agents.add(hold);
+                    hold.printAgent();
                 }
                 socket.close();
             }

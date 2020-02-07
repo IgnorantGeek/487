@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class AgentMonitor extends Thread
 {
-    ArrayList<UdpBeacon> agents;
+    ArrayList<Agent> agents;
 
-    public AgentMonitor(ArrayList<UdpBeacon> agents)
+    public AgentMonitor(ArrayList<Agent> agents)
     {
         this.agents = agents;
     }
@@ -15,21 +15,19 @@ public class AgentMonitor extends Thread
     {
         try
         {
-            int currentSize = 0;
+            System.out.println("Entering agent loop.");
             while(true)
             {
-                if (agents.size() > currentSize)
+                for (Agent agent : agents)
                 {
-                    // do the thing, we have a new thread.
+                    if (System.currentTimeMillis() - agent.checkIn > ((agent.beacon.Interval*2) * 60000))
+                    {
+                        // dead agent
+                    }
                 }
-                else
-                {
-                    // what do we do? how do we check for a dead thread?
-                    // what if it just so happens that two agents are sending beacons at the same time?
-                    // if the intervals are the same, one of those beacons will always be sent within the time
-                    // that it takes to process the other one, meaning that there could be a case where a beacon
-                    // is always missed. Might need to ask about this scenario.
-                }
+
+                // wait 20 seconds and try again. Checks 3 times a minute
+                sleep(20000);
             }
         }
         catch(Exception e)
