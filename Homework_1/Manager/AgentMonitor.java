@@ -15,7 +15,22 @@ public class AgentMonitor extends Thread
     {
         try
         {
-            // Run here
+            int currentSize = 0;
+            while(true)
+            {
+                if (agents.size() > currentSize)
+                {
+                    // do the thing, we have a new thread.
+                }
+                else
+                {
+                    // what do we do? how do we check for a dead thread?
+                    // what if it just so happens that two agents are sending beacons at the same time?
+                    // if the intervals are the same, one of those beacons will always be sent within the time
+                    // that it takes to process the other one, meaning that there could be a case where a beacon
+                    // is always missed. Might need to ask about this scenario.
+                }
+            }
         }
         catch(Exception e)
         {

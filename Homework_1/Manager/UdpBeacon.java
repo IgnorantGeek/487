@@ -28,4 +28,10 @@ public class UdpBeacon
                            "\nClient IP:           " + IP[0] + "." + IP[1] + "." + IP[2] + "." + IP[3] +
                            "\nCommand (TCP) Port:  " + CmdPort + '\n');
     }
+
+    public boolean compareTo(UdpBeacon b)
+    {
+        if (this.ID == b.ID && this.StartupTime == b.StartupTime) return true;
+        else return false;
+    }
 }
