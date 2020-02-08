@@ -3,15 +3,15 @@ package Homework_1.Manager;
 import java.io.*;
 import java.net.*;
 
-public class CmdAgent extends Thread
+public class CmdAgent
 {
-    public static void main(String[] args)
+    public static void contactClient(UdpBeacon beacon)
     {
         try
         {
-            String servIP = "127.0.0.1";
-
-            Socket clientSocket = new Socket(servIP, 51717);
+            int serverPort = beacon.CmdPort;
+            String serverIP = beacon.IP[0] + "." + beacon.IP[1] + "." + beacon.IP[2] + "." + beacon.IP[3] + ".";
+            Socket clientSocket = new Socket(serverIP, serverPort);
 
             DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
