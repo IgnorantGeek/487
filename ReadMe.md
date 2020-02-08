@@ -1,4 +1,4 @@
-This assignment is devided into two parts, the manager (java) and the agent (C).
+This assignment is divided into two parts, the manager (java) and the agent (C).
 
 To run the manager simply run the shell script "run_java.sh"
 (NOTE: you made need to run "chmod +x run_java.sh" to allow execution of the script)
