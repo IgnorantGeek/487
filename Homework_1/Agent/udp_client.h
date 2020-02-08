@@ -1,17 +1,17 @@
 #ifndef UDP_CLIENT_H
  #define UDP_CLIENT_H
 
-#include "./tcp_server.h"
+#include "./defaults.h"
 
 // header file for UDP
 
 struct BEACON
 {
-    int ID;
-    int StartUpTime;
-    int TimeInterval;
+    int32_t ID;
+    int32_t StartUpTime;
+    int32_t TimeInterval;
     unsigned char IP[4];
-    int cmdPort;
+    int32_t cmdPort;
 };
 
 void * send_beacon(void * args);

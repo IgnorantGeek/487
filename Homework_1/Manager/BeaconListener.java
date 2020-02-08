@@ -43,7 +43,7 @@ public class BeaconListener extends Thread
                     Agent hold = new Agent(beacon);
                     agents.add(hold);
                     
-                    //hold.printAgent();
+                    hold.printAgent();
                 }
                 socket.close();
             }

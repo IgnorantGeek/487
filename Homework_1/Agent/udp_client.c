@@ -1,7 +1,7 @@
 #include "udp_client.h"
 
 // Creates a beacon, and sends it to the server every x minutes, specified by timeInterval value
-void * send_beacon(void * args)
+void * send_beacon(void * arg)
 {
     // Initialize locals
     int server_socket;
@@ -21,9 +21,11 @@ void * send_beacon(void * args)
 
     ip4_to_bytes(IP, DEFAULT_HOST);
 
-    configure_beacon(&send_beacon, 1, IP, 51717);
+    // Configure with the port from the TCP server thread
+    int32_t port = (intptr_t) arg;
+    configure_beacon(&send_beacon, 1, IP, port);
 
-    printf("UDP-CLIENT: socket created.\n"); // \nUDP Beacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
+    printf("UDP-CLIENT: socket created.\nUDP Beacon:\nID          - %d\nStartupTime - %d\nCmdPort - %d\n\n", send_beacon.ID, send_beacon.StartUpTime, send_beacon.cmdPort);
 
     // Configure IP route
     configure_route_host(&client_addr, UDP_PORT, DEFAULT_HOST);
@@ -49,7 +51,7 @@ void * send_beacon(void * args)
 }
 
 // Constructor for the beacon struct
-void configure_beacon(struct BEACON * beacon, int TimeInterval, unsigned char IP[4], int cmdPort)
+void configure_beacon(struct BEACON * beacon, int TimeInterval, unsigned char IP[4], int32_t cmdPort)
 {
     srand(time(NULL));
     beacon->ID = rand();

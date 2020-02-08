@@ -11,12 +11,15 @@ public class CmdAgent
         {
             // Initialize and create the socket from the beacon info
             int serverPort = beacon.CmdPort;
-            String serverIP = beacon.IP[0] + "." + beacon.IP[1] + "." + beacon.IP[2] + "." + beacon.IP[3] + ".";
+            String serverIP = beacon.IP[0] + "." + beacon.IP[1] + "." + beacon.IP[2] + "." + beacon.IP[3];
+            System.out.println("TCP CLIENT: Attempting to contact " + serverIP + " on port " + serverPort + "....");
             Socket clientSocket = new Socket(serverIP, serverPort);
 
             // Initialize input and output streams
             DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
+
+            System.out.println("TCP CLIENT: connection created.");
 
             // Message for server. (To be interpreted on server side)
             String message = "Message to send to server.";
@@ -48,7 +51,8 @@ public class CmdAgent
             inStream.close();
             outStream.close();
             clientSocket.close();
-
+            System.out.println("TCP CLIENT: Connection closed.");
+            
             return ret;
         }
         catch(Exception e)
