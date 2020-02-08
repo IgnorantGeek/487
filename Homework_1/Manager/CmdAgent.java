@@ -5,44 +5,56 @@ import java.net.*;
 
 public class CmdAgent
 {
-    public static void contactClient(UdpBeacon beacon)
+    public static String contactClient(UdpBeacon beacon)
     {
         try
         {
+            // Initialize and create the socket from the beacon info
             int serverPort = beacon.CmdPort;
             String serverIP = beacon.IP[0] + "." + beacon.IP[1] + "." + beacon.IP[2] + "." + beacon.IP[3] + ".";
             Socket clientSocket = new Socket(serverIP, serverPort);
 
+            // Initialize input and output streams
             DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
 
+            // Message for server. (To be interpreted on server side)
             String message = "Message to send to server.";
 
+            // Get the length of the message
             byte[] buf = message.getBytes();
             byte[] bufLengthInBinary = toBytes(buf.length);
             
-            // send 4 bytes
+            // Send the length in 4 bytes
             outStream.write(bufLengthInBinary, 0, bufLengthInBinary.length);
-            // send the string
+            
+            // Send the payload and flush stream
             outStream.write(buf, 0, buf.length);
             outStream.flush();
-            // read the data back
+
+            // Read the data back, starting with the length
             inStream.readFully(bufLengthInBinary);
+            
+            // Initialize a buffer to load data
             byte[] buf2 = new byte[Main.toInteger(bufLengthInBinary)];
-            System.out.println(Main.toInteger(bufLengthInBinary));
+
+            // Read the rest of the message
             inStream.readFully(buf2);
+
             // convert the binary bytes to string
             String ret = new String(buf2);
-            // should be all upcases now
-            System.out.println("Message returned from server: " + ret);
 
+            // Close all streams
             inStream.close();
             outStream.close();
             clientSocket.close();
+
+            return ret;
         }
         catch(Exception e)
         {
             System.out.println(e.getMessage());
+            return null;
         }
     }
 

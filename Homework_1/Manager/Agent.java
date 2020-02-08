@@ -24,4 +24,9 @@ public class Agent
     {
         this.checkIn = System.currentTimeMillis();
     }
+
+    public String sendCommand()
+    {
+        return CmdAgent.contactClient(this.beacon);
+    }
 }

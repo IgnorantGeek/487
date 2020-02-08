@@ -23,7 +23,7 @@ void * send_beacon(void * args)
 
     configure_beacon(&send_beacon, 1, IP, 51717);
 
-    printf("UDP-CLIENT: socket created.\nUDP Beacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
+    printf("UDP-CLIENT: socket created.\n"); // \nUDP Beacon:\nID          - %d\nStartupTime - %d\n\n", send_beacon.ID, send_beacon.StartUpTime);
 
     // Configure IP route
     configure_route_host(&client_addr, UDP_PORT, DEFAULT_HOST);
