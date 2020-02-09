@@ -1,9 +1,9 @@
-#ifndef UDP_CLIENT_H
- #define UDP_CLIENT_H
+#ifndef TRANSPONDER_H
+ #define TRANSPONDER_H
 
 #include "./defaults.h"
 
-// header file for UDP
+// Header file for UDP beacon transponder
 
 struct BEACON
 {

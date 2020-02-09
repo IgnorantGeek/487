@@ -1,4 +1,4 @@
-#include "udp_client.h"
+#include "transponder.h"
 
 // Creates a beacon, and sends it to the server every x minutes, specified by timeInterval value
 void * send_beacon(void * arg)

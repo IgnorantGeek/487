@@ -1,7 +1,7 @@
 #include "tcp_server.h"
 
 // Listen for a command from the manager over TCP
-void * cmd_listen(void * args)
+void * c_listen(void * args)
 {
     // Initialize locals
     int server_socket;

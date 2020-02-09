@@ -1,11 +1,11 @@
-#ifndef TCP_SERVER_H
- #define TCP_SERVER_H
+#ifndef CMD_LISTENER_H
+ #define CMD_LISTENER_H
 
-#include "./udp_client.h"
+#include "./transponder.h"
 
 // Header file for the tcp server
 
-void * cmd_listen(void * args);
+void * c_listen(void * args);
 void receive_one_byte(int client_socket, char *cur_char);
 void receive_bytes(int client_socket, char * buffer, int n);
 
