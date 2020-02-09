@@ -32,7 +32,7 @@ public class AgentMonitor extends Thread
                 if (agents.size() > currentSize)
                 {
                     // we might want this send command in a separate thread??
-                    System.out.println(agents.get(currentSize).sendCommand());
+                    agents.get(currentSize).contactAgent();
                     currentSize++;
                 }
 

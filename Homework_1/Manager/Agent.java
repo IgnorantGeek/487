@@ -4,6 +4,7 @@ public class Agent
 {
     // Holds the beacon
     public UdpBeacon beacon;
+    private CmdAgent tcp;
 
     // Last contact with the client
     public long checkIn;
@@ -12,6 +13,7 @@ public class Agent
     {
         this.beacon = beacon;
         checkIn = System.currentTimeMillis();
+        this.tcp = new CmdAgent(beacon);
     }
 
     public void printAgent()
@@ -25,8 +27,8 @@ public class Agent
         this.checkIn = System.currentTimeMillis();
     }
 
-    public String sendCommand()
+    public void contactAgent()
     {
-        return CmdAgent.contactClient(this.beacon);
+        this.tcp.start();
     }
 }

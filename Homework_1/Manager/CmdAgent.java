@@ -3,9 +3,16 @@ package Homework_1.Manager;
 import java.io.*;
 import java.net.*;
 
-public class CmdAgent
+public class CmdAgent extends Thread
 {
-    public static String contactClient(UdpBeacon beacon)
+    UdpBeacon beacon;
+
+    public CmdAgent(UdpBeacon beacon)
+    {
+        this.beacon = beacon;
+    }
+
+    public void run()
     {
         try
         {
@@ -47,18 +54,17 @@ public class CmdAgent
             // convert the binary bytes to string
             String ret = new String(buf2);
 
+            System.out.println("TCP CLIENT: Message from server - " + ret);
+
             // Close all streams
             inStream.close();
             outStream.close();
             clientSocket.close();
             System.out.println("TCP CLIENT: Connection closed.");
-            
-            return ret;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println(e.getMessage());
-            return null;
         }
     }
 
