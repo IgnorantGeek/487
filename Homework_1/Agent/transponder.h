@@ -5,6 +5,7 @@
 
 // Header file for UDP beacon transponder
 
+// A struct to hold the beacon sent to the manager
 struct BEACON
 {
     int32_t ID;

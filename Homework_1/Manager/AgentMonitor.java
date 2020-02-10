@@ -32,7 +32,6 @@ public class AgentMonitor extends Thread
                 // New agent found. Send the TCP command
                 if (agents.size() > currentSize)
                 {
-                    // we might want this send command in a separate thread??
                     agents.get(currentSize).contactAgent();
                     currentSize++;
                 }
