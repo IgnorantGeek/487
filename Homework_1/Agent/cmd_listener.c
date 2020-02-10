@@ -30,7 +30,7 @@ void * c_listen(void * args)
         while (1)
         {
             beacon_port++;
-            configure_route_host(&server_addr, TCP_PORT+beacon_port, DEFAULT_HOST);
+            configure_route_host(&server_addr, beacon_port, DEFAULT_HOST);
             if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) break;
         }
     }

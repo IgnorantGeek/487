@@ -22,7 +22,7 @@ public class BeaconListener extends Thread
             {
                 byte[] buffer = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                DatagramSocket socket = new DatagramSocket(51716);
+                DatagramSocket socket = new DatagramSocket(1068);
                 socket.receive(packet);
                 byte[] data = packet.getData();
                 UdpBeacon beacon = decodeBeacon(data);
@@ -34,12 +34,12 @@ public class BeaconListener extends Thread
                         // Update this check in time
                         agent.updateCheckIn();
                         newBeacon = false;
-                        System.out.println("Beacon recieved. Agent arrival time updated.");
+                        System.out.println("BEACON LISTENER: Beacon recieved. Agent arrival time updated.");
                     }
                 }
                 if (newBeacon)
                 {
-                    System.out.println("New agent added.");
+                    System.out.println("BEACON LISTENER: New agent added.");
                     Agent hold = new Agent(beacon);
                     agents.add(hold);
                     

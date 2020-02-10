@@ -23,8 +23,9 @@ public class AgentMonitor extends Thread
                     if (System.currentTimeMillis() - agent.checkIn > ((agent.beacon.Interval*2) * 60000))
                     {
                         // dead agent
-                        System.out.println("Agent with ID: " + agent.beacon.ID + " has not sent a beacon in " + agent.beacon.Interval * 2 + " minutes. Agent is considered dead.");
+                        System.out.println("MONITOR: Agent with ID: " + agent.beacon.ID + " has not sent a beacon in " + agent.beacon.Interval * 2 + " minutes. Agent is considered dead.");
                         agents.remove(agent);
+                        currentSize--;
                     }
                 }
 

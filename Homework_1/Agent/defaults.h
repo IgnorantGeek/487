@@ -18,8 +18,8 @@
 
 #define DEFAULT_HOST "127.0.0.1"
 
-#define TCP_PORT 51717
-#define UDP_PORT 51716
+#define TCP_PORT 1069
+#define UDP_PORT 1068
 
 void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, char * Hostname);
 void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port);
