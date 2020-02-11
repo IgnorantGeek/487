@@ -46,15 +46,30 @@ public class CmdAgent extends Thread
             inStream.readFully(bufLengthInBinary);
             
             // Initialize a buffer to load data
-            byte[] buf2 = new byte[Main.toInteger(bufLengthInBinary)];
+            byte[] OsMessageBuffer = new byte[Main.toInteger(bufLengthInBinary)];
 
             // Read the rest of the message
-            inStream.readFully(buf2);
+            inStream.readFully(OsMessageBuffer);
 
             // convert the binary bytes to string
-            String ret = new String(buf2);
+            int OsValid = -1;
+            String OsString = decodeOSData(OsMessageBuffer, OsValid);
 
-            System.out.println("MONITOR: Message from server - " + ret);
+            System.out.println("MONITOR: Agent Operating System - " + OsString);
+
+            // Read the length of the localtime message
+            inStream.readFully(bufLengthInBinary);
+
+            // Initialize a buffer to next payload
+            byte[] TimeMessageBuffer = new byte[Main.toInteger(bufLengthInBinary)];
+
+            // Read the localtime payload from the agent
+            inStream.readFully(TimeMessageBuffer);
+
+            int TimeValid = -1;
+            int TimeInteger = decodeTimeData(TimeMessageBuffer, TimeValid);
+
+            System.out.println("MONITOR: Agent Local Time (Unix) - " + TimeInteger);
 
             // Close all streams
             inStream.close();
@@ -86,5 +101,38 @@ public class CmdAgent extends Thread
         result[2] = (byte) (i >> 8);
         result[3] = (byte) (i /*>> 0*/);
         return result;
+    }
+
+    static String decodeOSData(byte[] data, int valid)
+    {
+        byte[] buf = new byte[data.length-4];
+        byte[] valid_buf = new byte[4];
+        for (int i = 0; i < data.length-4; i++)
+        {
+            buf[i] = data[i];
+        }
+        String OS = new String(buf);
+        for (int i = 0; i < 4; i++)
+        {
+            valid_buf[i] = data[data.length-4+i];
+        }
+        valid = Main.toInteger(valid_buf);
+        return OS;
+    }
+
+    static int decodeTimeData(byte[] data, int valid)
+    {
+        byte[] buf = new byte[4];
+        for (int i = 0; i < 4; i++)
+        {
+            buf[i] = data[i];
+        }
+        int time = Main.toInteger(buf);
+        for (int i = 0; i < 4; i++)
+        {
+            buf[i] = data[i+4];
+        }
+        valid = Main.toInteger(buf);
+        return time;
     }
 }

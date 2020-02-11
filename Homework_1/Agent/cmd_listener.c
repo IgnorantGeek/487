@@ -34,7 +34,7 @@ void * cmd_listen(void * args)
             if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) break;
         }
     }
-    
+
     // Signal beacon to be sent.
     pthread_t udp_thread;
     pthread_create(&udp_thread, NULL, send_beacon, (void *) (intptr_t) beacon_port);
@@ -68,13 +68,31 @@ void * cmd_listen(void * args)
         // Log the message from the client
         printf("TCP-SERVER: Message recieved from client: %s\n", buf);
 
-        // Send back the response
+        // Send back the OS with the valid flag
+        int os_valid = -1;
         char send_length_bytes[4];
-        char buffer[44] = "this is the message to send back to client.";
-        int_to_bytes(send_length_bytes, sizeof(buffer));
+        char os_string[16];
+        get_local_os(os_string, &os_valid);
+        int_to_bytes(send_length_bytes, sizeof(os_string));
         send(client_socket, send_length_bytes, 4, 0);
-        send(client_socket, buffer, sizeof(buffer), 0);
+        send(client_socket, os_string, sizeof(os_string), 0);
 
+        // Send the Local time with the valid flag
+        int t_valid = -1;
+        int t_hold;
+        char t_str[4];
+        char v_str[4];
+        memset(&send_length_bytes, 0, 4);
+        get_local_time(&t_hold, &t_valid);
+        int_to_bytes(t_str, t_hold);
+        int_to_bytes(v_str, t_valid);
+        char ret_str[8];
+        memcpy(ret_str, t_str, 4);
+        memcpy(ret_str+4, v_str, 4);
+        int_to_bytes(send_length_bytes, 8);
+        send(client_socket, send_length_bytes, 4, 0);
+        send(client_socket, ret_str, 8, 0);
+        
         // release buffer
         free(buf);
         printf("TCP-SERVER: Listening for new connection....\n");
@@ -106,4 +124,16 @@ void receive_bytes(int client_socket, char * buffer, int n)
     }
 }
 
-void get_local_os(char OS[], int * valid);
+void get_local_os(char OS[16], int * valid)
+{
+    struct utsname uts;
+    memset(&uts, 0, sizeof(uts));
+    *valid = uname(&uts);
+    memcpy(OS, uts.sysname, sizeof(uts.sysname));
+}
+
+void get_local_time(int * t, int * valid)
+{
+    *t = time(NULL);
+    *valid = 0;
+}
