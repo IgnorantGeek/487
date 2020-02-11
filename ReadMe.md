@@ -1,9 +1,17 @@
 This assignment is divided into two parts, the manager (java) and the agent (C).
 
 To run the manager run the shell script "run_java.sh"
-(NOTE: you made need to run "chmod +x run_java.sh" to allow execution of the script)
+(NOTE: you may need to run "chmod +x run_java.sh" to allow execution of the script)
 
 To run the agent, go into the Homework_1/Agent folder and run "make" then run "./agent"
+The agent can be run in three different configurations based on the input parameters.
+     ./agent                          : Default. Manager IP - localhost
+                                                 Interval   - 1
+                                                 Port       - 1069
+     ./agent <Manager IP>             : IP Only. Manager IP - IP
+                                                 Interval   - 1
+                                                 Port       - 1069
+     ./agent <Manager IP> <Port> <Interval>
 To clean up the agent run "make clean"
 
 

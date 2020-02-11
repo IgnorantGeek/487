@@ -29,7 +29,7 @@ public class CmdAgent extends Thread
             System.out.println("MONITOR: TCP connection created.");
 
             // Message for server. (To be interpreted on server side)
-            String message = "Message to send to server.";
+            String message = "run-commands";
 
             // Get the length of the message
             byte[] buf = message.getBytes();
@@ -55,7 +55,7 @@ public class CmdAgent extends Thread
             int OsValid = -1;
             String OsString = decodeOSData(OsMessageBuffer, OsValid);
 
-            System.out.println("MONITOR: Agent Operating System - " + OsString);
+            System.out.println("MONITOR: Agent with ID " + beacon.ID + " Operating System - " + OsString);
 
             // Read the length of the localtime message
             inStream.readFully(bufLengthInBinary);
@@ -69,7 +69,7 @@ public class CmdAgent extends Thread
             int TimeValid = -1;
             int TimeInteger = decodeTimeData(TimeMessageBuffer, TimeValid);
 
-            System.out.println("MONITOR: Agent Local Time (Unix) - " + TimeInteger);
+            System.out.println("MONITOR: Agent with ID " + beacon.ID + " Local Time (Unix) - " + TimeInteger);
 
             // Close all streams
             inStream.close();
