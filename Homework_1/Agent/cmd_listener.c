@@ -17,8 +17,8 @@ void * cmd_listen(void * args)
         exit(EXIT_FAILURE);
     }
 
-    configure_route_host(&server_addr, TCP_PORT, DEFAULT_HOST);
-    int32_t beacon_port = TCP_PORT;
+    configure_route_any(&server_addr, ((struct beacon_arg *) args)->Port);
+    int32_t beacon_port = ((struct beacon_arg *) args)->Port;
 
     // Bind the port
     if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
@@ -30,14 +30,14 @@ void * cmd_listen(void * args)
         while (1)
         {
             beacon_port++;
-            configure_route_host(&server_addr, beacon_port, DEFAULT_HOST);
+            configure_route_any(&server_addr, beacon_port);
             if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) break;
         }
     }
     
     // Signal beacon to be sent.
     pthread_t udp_thread;
-    pthread_create(&udp_thread, NULL, send_beacon, (void *) (intptr_t) beacon_port);
+    pthread_create(&udp_thread, NULL, send_beacon, &args);
 
     // Listen for connections from client
     printf("TCP-SERVER: socket created. Listening for incoming connections....\n");

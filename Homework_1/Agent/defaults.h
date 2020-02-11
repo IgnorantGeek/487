@@ -16,6 +16,13 @@
 
 // Defaults header file
 
+// Struct for input parameters
+struct beacon_arg
+{
+    int Port;
+    int Interval;
+};
+
 #define DEFAULT_HOST "127.0.0.1"
 
 #define TCP_PORT 1069
