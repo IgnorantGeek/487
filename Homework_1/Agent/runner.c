@@ -4,24 +4,30 @@ int main(int argc, char ** argv)
 {
     pthread_t tcp_thread;
 
-    printf("Arg count: %d\n", argc);
     struct beacon_arg args;
     //memset(&args, 0, sizeof(struct beacon_arg));
     if (argc == 1)
     {
-        printf("No arguments detected. Using default Port (1069), Interval (1 min), and manager IP (localhost)\n");
+        printf("No arguments detected. Using defaults (Manager IP: localhost | Port: 1069 | Interval : 1)\n");
         args.Port = TCP_PORT;
         args.Interval = 1;
+        sprintf(args.ip, "%s", DEFAULT_HOST);
+    }
+    else if (argc == 2)
+    {
+        args.Port = TCP_PORT;
+        args.Interval = 1;
+        sprintf(args.ip, "%s", argv[1]);
     }
     else if (argc == 4)
     {
-        args.Port = atoi(argv[1]);
-        args.Interval = atoi(argv[2]);
-        sprintf(args.ip, "%s", argv[3]);
+        args.Port = atoi(argv[2]);
+        args.Interval = atoi(argv[3]);
+        sprintf(args.ip, "%s", argv[1]);
     }
     else
     {
-        printf("Usage: ./agent <Port> <Interval> <IP>");
+        printf("ERROR - Usage: ./agent <Manager IP>\n               ./agent <Manager IP> <Port> <Interval>\n");
         exit(0);
     }
 
