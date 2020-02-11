@@ -12,4 +12,6 @@ default    (`./agent`)
 Manager IP (`./agent <IP>`)
 Custom     (`./agent <IP> <Port> <Interval>`)
 
+when run as default, the IP is localhost, the Port is 1069, and the Interval is 1
+
 To clean up the agent run "make clean"
