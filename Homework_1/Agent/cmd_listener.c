@@ -17,27 +17,25 @@ void * cmd_listen(void * args)
         exit(EXIT_FAILURE);
     }
 
-    configure_route_any(&server_addr, ((struct beacon_arg *) args)->Port);
-    int32_t beacon_port = ((struct beacon_arg *) args)->Port;
+    // Copy the argument to a new arg
+    struct beacon_arg *arg = (struct beacon_arg *) args;
 
-    // Bind the port
-    if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) < 0)
+    configure_route_any(&server_addr, arg->Port);
+    int32_t beacon_port = arg->Port;
+
+    while (1)
     {
-        // Here we need to pick another port and try to rebind it
-        perror("BIND ERROR: Failed to bind default TCP socket.\n");
-
-        // Increment up from the default port number until we find a valid one
-        while (1)
-        {
-            beacon_port++;
-            configure_route_any(&server_addr, beacon_port);
-            if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) break;
-        }
+        configure_route_any(&server_addr, beacon_port);
+        if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) break;
+        beacon_port++;
     }
+
+    // Reset the port if it has changed
+    arg->Port = beacon_port;
 
     // Signal beacon to be sent.
     pthread_t udp_thread;
-    pthread_create(&udp_thread, NULL, send_beacon, &args);
+    pthread_create(&udp_thread, NULL, send_beacon, arg);
 
     // Listen for connections from client
     printf("TCP-SERVER: socket created. Listening for incoming connections....\n");

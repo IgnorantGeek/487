@@ -6,21 +6,22 @@ int main(int argc, char ** argv)
 
     printf("Arg count: %d\n", argc);
     struct beacon_arg args;
-    memset(&args, 0, sizeof(struct beacon_arg));
+    //memset(&args, 0, sizeof(struct beacon_arg));
     if (argc == 1)
     {
-        printf("No arguments detected. Using default Port (1069) and Interval (1 min)\n");
+        printf("No arguments detected. Using default Port (1069), Interval (1 min), and manager IP (localhost)\n");
         args.Port = TCP_PORT;
         args.Interval = 1;
     }
-    else if (argc == 3)
+    else if (argc == 4)
     {
-        args.Port = argv[1];
-        args.Interval = argv[2];
+        args.Port = atoi(argv[1]);
+        args.Interval = atoi(argv[2]);
+        sprintf(args.ip, "%s", argv[3]);
     }
     else
     {
-        printf("Usage: ./agent <Port> <Interval>");
+        printf("Usage: ./agent <Port> <Interval> <IP>");
         exit(0);
     }
 

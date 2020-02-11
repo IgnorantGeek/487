@@ -14,6 +14,7 @@
 #include <time.h>
 #include <pthread.h>
 #include <sys/utsname.h>
+#include <ifaddrs.h>
 
 // Defaults header file
 
@@ -22,6 +23,7 @@ struct beacon_arg
 {
     int Port;
     int Interval;
+    char ip[16];
 };
 
 #define DEFAULT_HOST "127.0.0.1"
@@ -35,5 +37,6 @@ int toInteger32_le(char *bytes);
 int toInteger32_be(char *bytes);
 void int_to_bytes(char bytes[4], int32_t n);
 void ip4_to_bytes(unsigned char buffer[4], char * ip_addr);
+void get_ip_4(char addr[16]);
 
 #endif

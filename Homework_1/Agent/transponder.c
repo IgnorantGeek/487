@@ -18,18 +18,20 @@ void * send_beacon(void * arg)
     }
 
     unsigned char IP[4];
+    char ip_str[16];
+    get_ip_4(ip_str);
 
-    
+    printf("IP address marked: %s\n", ip_str);
 
-    ip4_to_bytes(IP, DEFAULT_HOST);
+    ip4_to_bytes(IP, ip_str);
 
     // Configure with the port from the TCP server thread
     configure_beacon(&send_beacon, ((struct beacon_arg *) arg)->Interval, IP, ((struct beacon_arg *) arg)->Port);
 
-    printf("UDP-CLIENT: socket created.\n"); // \nUDP Beacon:\nID          - %d\nStartupTime - %d\nCmdPort - %d\n\n", send_beacon.ID, send_beacon.StartUpTime, send_beacon.cmdPort);
+    printf("UDP-CLIENT: socket created.\n"); // UDP Beacon:\nID          - %d\nStartupTime - %d\nCmdPort - %d\n\n", send_beacon.ID, send_beacon.StartUpTime, send_beacon.cmdPort);
 
     // Configure IP route
-    configure_route_any(&client_addr, UDP_PORT);
+    configure_route_host(&client_addr, UDP_PORT, ((struct beacon_arg *) arg)->ip);
 
     // Serialize the beacon for transfer
     char serial_buffer[20];
