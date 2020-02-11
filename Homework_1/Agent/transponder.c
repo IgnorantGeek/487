@@ -25,7 +25,7 @@ void * send_beacon(void * arg)
     int32_t port = (intptr_t) arg;
     configure_beacon(&send_beacon, 1, IP, port);
 
-    printf("UDP-CLIENT: socket created.\nUDP Beacon:\nID          - %d\nStartupTime - %d\nCmdPort - %d\n\n", send_beacon.ID, send_beacon.StartUpTime, send_beacon.cmdPort);
+    printf("UDP-CLIENT: socket created.\n"); // \nUDP Beacon:\nID          - %d\nStartupTime - %d\nCmdPort - %d\n\n", send_beacon.ID, send_beacon.StartUpTime, send_beacon.cmdPort);
 
     // Configure IP route
     configure_route_host(&client_addr, UDP_PORT, DEFAULT_HOST);

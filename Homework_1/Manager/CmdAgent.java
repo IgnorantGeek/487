@@ -19,14 +19,14 @@ public class CmdAgent extends Thread
             // Initialize and create the socket from the beacon info
             int serverPort = beacon.CmdPort;
             String serverIP = beacon.IP[0] + "." + beacon.IP[1] + "." + beacon.IP[2] + "." + beacon.IP[3];
-            System.out.println("TCP CLIENT: Attempting to contact " + serverIP + " on port " + serverPort + "....");
+            System.out.println("MONITOR: Attempting to contact " + serverIP + " on port " + serverPort + "....");
             Socket clientSocket = new Socket(serverIP, serverPort);
 
             // Initialize input and output streams
             DataInputStream inStream = new DataInputStream(clientSocket.getInputStream());
             DataOutputStream outStream = new DataOutputStream(clientSocket.getOutputStream());
 
-            System.out.println("TCP CLIENT: connection created.");
+            System.out.println("MONITOR: TCP connection created.");
 
             // Message for server. (To be interpreted on server side)
             String message = "Message to send to server.";
@@ -54,13 +54,13 @@ public class CmdAgent extends Thread
             // convert the binary bytes to string
             String ret = new String(buf2);
 
-            System.out.println("TCP CLIENT: Message from server - " + ret);
+            System.out.println("MONITOR: Message from server - " + ret);
 
             // Close all streams
             inStream.close();
             outStream.close();
             clientSocket.close();
-            System.out.println("TCP CLIENT: Connection closed.");
+            System.out.println("MONITOR: TCP Connection closed.");
         }
         catch (Exception e)
         {

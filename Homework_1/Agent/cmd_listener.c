@@ -34,7 +34,7 @@ void * cmd_listen(void * args)
             if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) break;
         }
     }
-    printf("%d\n", beacon_port);
+    
     // Signal beacon to be sent.
     pthread_t udp_thread;
     pthread_create(&udp_thread, NULL, send_beacon, (void *) (intptr_t) beacon_port);
@@ -105,3 +105,5 @@ void receive_bytes(int client_socket, char * buffer, int n)
         bytes_received++;
     }
 }
+
+void get_local_os(char OS[], int * valid);

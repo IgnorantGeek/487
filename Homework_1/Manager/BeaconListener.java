@@ -34,16 +34,14 @@ public class BeaconListener extends Thread
                         // Update this check in time
                         agent.updateCheckIn();
                         newBeacon = false;
-                        System.out.println("BEACON LISTENER: Beacon recieved. Agent arrival time updated.");
+                        System.out.println("BEACON LISTENER: Beacon recieved. Arrival time updated for agent with ID " + agent.beacon.ID);
                     }
                 }
                 if (newBeacon)
                 {
-                    System.out.println("BEACON LISTENER: New agent added.");
                     Agent hold = new Agent(beacon);
                     agents.add(hold);
-                    
-                    hold.printAgent();
+                    System.out.println("BEACON LISTENER: New agent added with ID - " + hold.beacon.ID);
                 }
                 socket.close();
             }
