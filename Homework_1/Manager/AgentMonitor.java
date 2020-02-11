@@ -36,8 +36,8 @@ public class AgentMonitor extends Thread
                     currentSize++;
                 }
 
-                // wait 20 seconds and try again. Checks 3 times a minute
-                sleep(20000);
+                // wait 5 seconds and try again. Checks 3 times a minute
+                sleep(5000);
             }
         }
         catch(Exception e)
