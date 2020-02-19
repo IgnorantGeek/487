@@ -42,7 +42,6 @@ public class BeaconListener extends Thread
                     Agent hold = new Agent(beacon);
                     agents.add(hold);
                     System.out.println("BEACON LISTENER: New agent added with ID - " + hold.beacon.ID);
-                    hold.printAgent();
                 }
                 socket.close();
             }
