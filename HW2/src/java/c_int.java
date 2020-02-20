@@ -13,6 +13,11 @@ public class c_int
         this.buf = b;
     }
 
+    public c_int(int i)
+    {
+        this.setValue(i);
+    }
+
     public int getSize()
     {
         return 4; // I think the buffer size is always 4
