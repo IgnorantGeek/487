@@ -64,7 +64,7 @@ void * cmd_listen(void * args)
         receive_bytes(client_socket, buf, packet_length);
 
         // Log the message from the client
-        if (buf != "run-commands") 
+        if (strcmp(buf, "run-commands")) 
         {
             printf("TCP-SERVER: ERROR -- Misformmated command from manager.\n");
             free(buf);
