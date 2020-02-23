@@ -60,8 +60,16 @@ public class GetLocalTime
             byte[] payload = new byte[104+length];
             inStream.readFully(payload);
 
-            // Decode the buffer
+            byte[] timeByte = new byte[4];
 
+            for (int i = 0; i < 4; i++)
+            {
+                timeByte[i] = payload[104+i];
+            }
+
+            // Set the values
+            this.time.setValue(timeByte);
+            this.valid.setValue(payload[payload.length-1]);
 
             // Close the socket
             server.close();
@@ -70,8 +78,7 @@ public class GetLocalTime
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
-            System.out.println(e.getLocalizedMessage());
+            // Do nothing
         }
     }
 }

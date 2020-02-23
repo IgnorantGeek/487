@@ -16,20 +16,28 @@ public class GetLocalOS
     {
         // Create the buffer to contact C server
         int length = OS.size() + valid.getSize();
-        byte[] buffer = new byte[104+length];
+        byte[] header = new byte[104];
+        byte[] buffer = new byte[length];
+
+        // Set valid bit for checking
+        buffer[16] = -1;
+
+        // Create the command ID
         String id = "GetLocalOS";
+
+        // Initialize the header
         for (int i = 0; i < 100; i++)
         {
             if (i < id.length())
             {
-                buffer[i] = (byte) id.charAt(i);
+                header[i] = (byte) id.charAt(i);
             }
-            else buffer[i] = (byte) 'n';
+            else header[i] = (byte) '0';
         }
         byte[] size = Defaults.toBytes(length);
         for (int i = 0; i < 4; i++)
         {
-            buffer[100+i] = size[i];
+            header[100+i] = size[i];
         }
         
         // Try to contact the server
@@ -41,21 +49,33 @@ public class GetLocalOS
             DataOutputStream outStream = new DataOutputStream(server.getOutputStream());
 
             // Write the buffer and flush stream
+            outStream.write(header, 0, header.length);
             outStream.write(buffer, 0, buffer.length);
             outStream.flush();
 
             // Read back the buffer with the payload
-            inStream.readFully(buffer);
+            byte[] payload = new byte[104+length];
+            inStream.readFully(payload);
 
-            // Decode the buffer
+            byte[] timeByte = new byte[4];
 
+            for (int i = 0; i < 4; i++)
+            {
+                timeByte[i] = payload[104+i];
+            }
+
+            // Set the values
+            
+            this.valid.setValue(payload[payload.length-1]);
 
             // Close the socket
             server.close();
+            inStream.close();
+            outStream.close();
         }
         catch (Exception e)
         {
-            // System.out.println(e.getMessage());
+            // Do nothing
         }
     }
 }
