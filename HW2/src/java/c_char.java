@@ -26,6 +26,11 @@ public class c_char
         return (char) this.buf;
     }
 
+    public int getSize()
+    {
+        return 1; // Size should always be 1, only 1 byte
+    }
+
     public void setValue(byte b)
     {
         this.buf = b;
