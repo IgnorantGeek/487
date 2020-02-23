@@ -4,7 +4,7 @@ LDFLAGS  := -L/usr/lib -lm -pthread
 BUILD    := ./
 OBJ_DIR  := $(BUILD)objects
 APP_DIR  := $(BUILD)
-TARGET   := agent
+TARGET   := rpc_server
 INCLUDE  := -Iinclude/
 SRC      :=                      \
    $(wildcard *.c)         \

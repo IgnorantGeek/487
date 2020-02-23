@@ -1,4 +1,4 @@
-package java;
+package client;
 
 public class c_char
 {

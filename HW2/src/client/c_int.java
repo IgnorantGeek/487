@@ -1,4 +1,4 @@
-package java;
+package client;
 
 import java.nio.ByteBuffer;
 
