@@ -45,3 +45,4 @@ void receive_bytes(int client_socket, char * buffer, int n);
 void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, char * Hostname);
 void configure_route_any(struct sockaddr_in * routeAddr, int Port);
 int toInteger32_be(char *bytes);
+void int_to_bytes(char bytes[4], int32_t n);

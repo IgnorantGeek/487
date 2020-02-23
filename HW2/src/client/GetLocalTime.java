@@ -57,7 +57,8 @@ public class GetLocalTime
             outStream.flush();
 
             // Read back the buffer with the payload
-            inStream.readFully(buffer);
+            byte[] payload = new byte[104+length];
+            inStream.readFully(payload);
 
             // Decode the buffer
 

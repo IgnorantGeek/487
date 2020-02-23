@@ -51,10 +51,10 @@ int main()
         else break;
     }
 
-    char * command = (char *) malloc(cmd_len);
-    memcpy(command, header, cmd_len);
+    char * cmd_id = (char *) malloc(cmd_len);
+    memcpy(cmd_id, header, cmd_len);
 
-    printf("Command - %s\n", command);
+    printf("Command - %s\n", cmd_id);
 
     char length[4];
     memcpy(length, header+100, 4);
@@ -62,26 +62,43 @@ int main()
     // Allocate the buffer
     char * buffer = (char *) malloc(toInteger32_be(length));
     
-    // Check which command this is
-    if (strcmp(command, "GetLocalTime"))
+    // Check command ID
+    if (strcmp(cmd_id, "GetLocalTime"))
     {
         // run Get local time
+        GET_LOCAL_TIME lt;
+        memset(&lt, 0, sizeof(lt));
+        getLocalTime(&lt);
+        char time[4];
+        int_to_bytes(time, lt.time);
+        memcpy(buffer, time, 4);
+        buffer[5] = lt.valid;
+        send(client_socket, header, 104, 0);
+        send(client_socket, buffer, sizeof(buffer), 0);
     }
-    else if (strcmp(command, "GetLocalOS"))
+    else if (strcmp(cmd_id, "GetLocalOS"))
     {
         // run get local os
+        GET_LOCAL_OS os;
+        memset(&os, 0, sizeof(os));
+        getLocalOs(&os);
+        memcpy(buffer, os.OS, 16);
+        buffer[17] = os.valid;
+        send(client_socket, header, 104, 0);
+        send(client_socket, buffer, sizeof(buffer), 0);
     }
-    else if (strcmp(command, "GetDiskData"))
+    else if (strcmp(cmd_id, "GetDiskData"))
     {
         // run get disk data
     }
     else
     {
-        // Default case
+        printf("COMMAND ERROR: No command with id: %s\n", cmd_id);
+        exit(EXIT_FAILURE);
     }
     
     free(buffer);
-    free(command);
+    free(cmd_id);
     return 0;
 }
 
@@ -132,4 +149,27 @@ int toInteger32_be(char *bytes)
             (bytes[2] << 8) + 
             bytes[3];
     return tmp;
+}
+
+void getLocalTime(GET_LOCAL_TIME *lt)
+{
+    lt->time = time(NULL);
+    lt->valid = '0';
+}
+
+void getLocalOs(GET_LOCAL_OS *os)
+{
+    struct utsname uts;
+    memset(&uts, 0, sizeof(uts));
+    os->valid = uname(&uts);
+    memcpy(os->OS, uts.sysname, sizeof(uts.sysname));
+}
+
+// Convert a 32 bit integer to bytes
+void int_to_bytes(char bytes[4], int32_t n)
+{
+    bytes[0] = (n >> 24) & 0xFF;
+    bytes[1] = (n >> 16) & 0xFF;
+    bytes[2] = (n >> 8) & 0xFF;
+    bytes[3] = n & 0xFF;
 }
