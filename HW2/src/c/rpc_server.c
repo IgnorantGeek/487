@@ -63,8 +63,9 @@ int main()
     char * buffer = (char *) malloc(toInteger32_be(length));
     
     // Check command ID
-    if (strcmp(cmd_id, "GetLocalTime"))
+    if (strcmp(cmd_id, "GetLocalTime") == 0)
     {
+        printf("Entered get local time block\n");
         // run Get local time
         GET_LOCAL_TIME lt;
         memset(&lt, 0, sizeof(lt));
@@ -76,18 +77,20 @@ int main()
         send(client_socket, header, 104, 0);
         send(client_socket, buffer, sizeof(buffer), 0);
     }
-    else if (strcmp(cmd_id, "GetLocalOS"))
+    else if (strcmp(cmd_id, "GetLocalOS") == 0)
     {
+        printf("Entered get local os block\n");
         // run get local os
         GET_LOCAL_OS os;
         memset(&os, 0, sizeof(os));
         getLocalOs(&os);
+        memset(os.OS, 0, 16);
         memcpy(buffer, os.OS, 16);
         buffer[17] = os.valid;
         send(client_socket, header, 104, 0);
         send(client_socket, buffer, sizeof(buffer), 0);
     }
-    else if (strcmp(cmd_id, "GetDiskData"))
+    else if (strcmp(cmd_id, "GetDiskData") == 0)
     {
         // run get disk data
     }

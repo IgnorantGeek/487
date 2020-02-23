@@ -71,6 +71,8 @@ public class GetLocalTime
             this.time.setValue(timeByte);
             this.valid.setValue(payload[payload.length-1]);
 
+            System.out.println("System time: " + this.time.getValue());
+
             // Close the socket
             server.close();
             inStream.close();

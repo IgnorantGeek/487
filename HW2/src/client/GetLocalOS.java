@@ -7,15 +7,19 @@ import java.util.ArrayList;
 
 public class GetLocalOS
 {
-    ArrayList<c_char> OS = new ArrayList<c_char>(16);
+    ArrayList<c_char> OS;
     c_char valid;
 
-    public GetLocalOS() { }
+    public GetLocalOS()
+    {
+        this.OS = new ArrayList<c_char>();
+        this.valid = new c_char();
+    }
 
     public void execute(String IP, int Port)
     {
         // Create the buffer to contact C server
-        int length = OS.size() + valid.getSize();
+        int length = 17;
         byte[] header = new byte[104];
         byte[] buffer = new byte[length];
 
@@ -57,16 +61,19 @@ public class GetLocalOS
             byte[] payload = new byte[104+length];
             inStream.readFully(payload);
 
-            byte[] timeByte = new byte[4];
-
-            for (int i = 0; i < 4; i++)
-            {
-                timeByte[i] = payload[104+i];
-            }
-
             // Set the values
-            
+            for (int i = 104; i < payload.length; i++)
+            {
+                if (payload[i] != 0) OS.add(new c_char(payload[i]));
+                else break;
+            }
             this.valid.setValue(payload[payload.length-1]);
+
+            for (c_char c : this.OS)
+            {
+                System.out.print(c.getValue());
+            }
+            System.out.println();
 
             // Close the socket
             server.close();
