@@ -16,8 +16,18 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    // configure the route
-    configure_route_any(&server_addr, 1069);
+    int port = 1069;
+
+    while (1)
+    {
+        configure_route_any(&server_addr, port);
+        if ((bind(server_socket, (struct sockaddr *) &server_addr, sizeof(server_addr))) == 0) 
+        {
+            printf("Using port: %d\n", port);
+            break;
+        }
+        port++;
+    }
 
     // Listen for connections from client
     printf("TCP-SERVER: socket created. Listening for incoming connections....\n");
@@ -31,10 +41,47 @@ int main()
     int client_socket = accept(server_socket, &client_addr, &client_len);
     printf("TCP-SERVER: Acknowledgement recieved. Reading transmission....\n");
 
-    char command[100];
-    receive_bytes(client_socket, command, 100);
+    char header[104];
+    receive_bytes(client_socket, header, 104);
 
-    printf("Command recieved. C: %s\n", command);
+    int cmd_len = 0;
+    for (int i = 0; i < 104; i++)
+    {
+        if (header[i] != '0') cmd_len++;
+        else break;
+    }
+
+    char * command = (char *) malloc(cmd_len);
+    memcpy(command, header, cmd_len);
+
+    printf("Command - %s\n", command);
+
+    char length[4];
+    memcpy(length, header+100, 4);
+
+    // Allocate the buffer
+    char * buffer = (char *) malloc(toInteger32_be(length));
+    
+    // Check which command this is
+    if (strcmp(command, "GetLocalTime"))
+    {
+        // run Get local time
+    }
+    else if (strcmp(command, "GetLocalOS"))
+    {
+        // run get local os
+    }
+    else if (strcmp(command, "GetDiskData"))
+    {
+        // run get disk data
+    }
+    else
+    {
+        // Default case
+    }
+    
+    free(buffer);
+    free(command);
     return 0;
 }
 
@@ -70,9 +117,19 @@ void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, c
 }
 
 // Configure the socket route with any in address (for testing)
-void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port)
+void configure_route_any(struct sockaddr_in * routeAddr, int Port)
 {
     routeAddr->sin_family = AF_INET;
     routeAddr->sin_port = htons(Port);
     routeAddr->sin_addr.s_addr = INADDR_ANY;
+}
+
+// Big Endian
+int toInteger32_be(char *bytes)
+{
+    int tmp = (bytes[0] << 24) + 
+            (bytes[1] << 16) + 
+            (bytes[2] << 8) + 
+            bytes[3];
+    return tmp;
 }

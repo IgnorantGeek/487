@@ -24,7 +24,7 @@ public class GetLocalOS
             {
                 buffer[i] = (byte) id.charAt(i);
             }
-            else buffer[i] = (byte) '\0';
+            else buffer[i] = (byte) 'n';
         }
         byte[] size = Defaults.toBytes(length);
         for (int i = 0; i < 4; i++)
@@ -55,7 +55,7 @@ public class GetLocalOS
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
         }
     }
 }

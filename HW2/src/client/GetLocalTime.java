@@ -19,20 +19,28 @@ public class GetLocalTime
     {
         // Create the buffer to contact C server
         int length = time.getSize() + valid.getSize();
-        byte[] buffer = new byte[104+length];
+        byte[] header = new byte[104];
+        byte[] buffer = new byte[length];
+
+        // Set valid bit for checking
+        buffer[4] = -1;
+
+        // Create the command ID
         String id = "GetLocalTime";
+
+        // Initialize the header
         for (int i = 0; i < 100; i++)
         {
             if (i < id.length())
             {
-                buffer[i] = (byte) id.charAt(i);
+                header[i] = (byte) id.charAt(i);
             }
-            else buffer[i] = (byte) '\0';
+            else header[i] = (byte) '0';
         }
         byte[] size = Defaults.toBytes(length);
         for (int i = 0; i < 4; i++)
         {
-            buffer[100+i] = size[i];
+            header[100+i] = size[i];
         }
         
         // Try to contact the server
@@ -44,6 +52,7 @@ public class GetLocalTime
             DataOutputStream outStream = new DataOutputStream(server.getOutputStream());
 
             // Write the buffer and flush stream
+            outStream.write(header, 0, header.length);
             outStream.write(buffer, 0, buffer.length);
             outStream.flush();
 
@@ -55,10 +64,13 @@ public class GetLocalTime
 
             // Close the socket
             server.close();
+            inStream.close();
+            outStream.close();
         }
         catch (Exception e)
         {
             System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
         }
     }
 }

@@ -43,4 +43,5 @@ void getDiskData(GET_DISK_DATA *ds);
 void receive_one_byte(int client_socket, char *cur_char);
 void receive_bytes(int client_socket, char * buffer, int n);
 void configure_route_host(struct sockaddr_in * routeAddr, unsigned short Port, char * Hostname);
-void configure_route_any(struct sockaddr_in * routeAddr, unsigned short Port);
+void configure_route_any(struct sockaddr_in * routeAddr, int Port);
+int toInteger32_be(char *bytes);
