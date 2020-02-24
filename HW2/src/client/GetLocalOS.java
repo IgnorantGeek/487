@@ -57,23 +57,24 @@ public class GetLocalOS
             outStream.write(buffer, 0, buffer.length);
             outStream.flush();
 
+            System.out.println(buffer.length);
+
             // Read back the buffer with the payload
             byte[] payload = new byte[104+length];
             inStream.readFully(payload);
 
             // Set the values
-            for (int i = 104; i < payload.length; i++)
+            for (int i = 0; i < payload.length; i++)
             {
-                if (payload[i] != 0) OS.add(new c_char(payload[i]));
-                else break;
+                System.out.println((char) payload[i]);
             }
             this.valid.setValue(payload[payload.length-1]);
 
-            for (c_char c : this.OS)
-            {
-                System.out.print(c.getValue());
-            }
-            System.out.println();
+            // for (c_char c : this.OS)
+            // {
+            //     System.out.print(c.getValue());
+            // }
+            System.out.println(this.valid);
 
             // Close the socket
             server.close();

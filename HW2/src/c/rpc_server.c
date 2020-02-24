@@ -169,7 +169,7 @@ void * process_command(void * arg)
         char time[4];
         int_to_bytes(time, lt.time);
         memcpy(buffer, time, 4);
-        buffer[5] = lt.valid;
+        buffer[4] = lt.valid;
         send(client_socket, header, 104, 0);
         send(client_socket, buffer, sizeof(buffer), 0);
     }
@@ -182,7 +182,7 @@ void * process_command(void * arg)
         getLocalOs(&os);
         memset(os.OS, 0, 16);
         memcpy(buffer, os.OS, 16);
-        buffer[17] = os.valid;
+        buffer[16] = os.valid;
         send(client_socket, header, 104, 0);
         send(client_socket, buffer, sizeof(buffer), 0);
     }

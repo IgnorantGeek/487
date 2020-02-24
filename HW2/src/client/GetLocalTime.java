@@ -72,6 +72,7 @@ public class GetLocalTime
             this.valid.setValue(payload[payload.length-1]);
 
             System.out.println("System time: " + this.time.getValue());
+            System.out.println("Valid flag: " + this.valid.getValue());
 
             // Close the socket
             server.close();
