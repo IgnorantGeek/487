@@ -28,8 +28,8 @@ public class Test
         }
         GetLocalTime time = new GetLocalTime();
         time.execute(IP, port);
+        
         GetLocalOS os = new GetLocalOS();
-
         os.execute(IP, port);
     }
 }

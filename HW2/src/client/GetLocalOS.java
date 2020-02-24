@@ -12,7 +12,7 @@ public class GetLocalOS
     public GetLocalOS()
     {
         this.OS = new c_char[16];
-        this.valid = new c_char();
+        this.valid = new c_char((char) -1);
     }
 
     public void execute(String IP, int Port)
@@ -59,11 +59,10 @@ public class GetLocalOS
             // Read back the buffer with the payload
             byte[] payload = new byte[104+length];
             inStream.readFully(payload);
+
+            this.valid.setValue(payload[104+length-1]);
             
-            this.valid.setValue(payload[payload.length-1]);
-
-            System.out.println(this.valid);
-
+            System.out.println("OS valid flag: " + this.valid.getValue());
             // Close the socket
             server.close();
             inStream.close();

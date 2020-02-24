@@ -148,15 +148,15 @@ void * process_command(void * arg)
 
     printf("Command - %s\n", cmd_id);
 
-    char len_in_bytes[4];
-    memcpy(len_in_bytes, header+100, 4);
-    int length = toInteger32_be(len_in_bytes);
+    char buf_len_in_bytes[4];
+    memcpy(buf_len_in_bytes, header+100, 4);
+    int buf_len = toInteger32_be(buf_len_in_bytes);
 
     // Allocate the buffer
-    char * buffer = (char *) malloc(length);
+    char * buffer = (char *) malloc(buf_len);
 
     // Read the buffer in (we don't really do anything with this)
-    receive_bytes(client_socket, buffer, length);
+    receive_bytes(client_socket, buffer, buf_len);
     
     // Check command ID
     if (strcmp(cmd_id, "GetLocalTime") == 0)
@@ -171,7 +171,7 @@ void * process_command(void * arg)
         memcpy(buffer, time, 4);
         buffer[4] = lt.valid;
         send(client_socket, header, 104, 0);
-        send(client_socket, buffer, sizeof(buffer), 0);
+        send(client_socket, buffer, buf_len, 0);
     }
     else if (strcmp(cmd_id, "GetLocalOS") == 0)
     {
@@ -184,7 +184,7 @@ void * process_command(void * arg)
         memcpy(buffer, os.OS, 16);
         buffer[16] = os.valid;
         send(client_socket, header, 104, 0);
-        send(client_socket, buffer, sizeof(buffer), 0);
+        send(client_socket, buffer, buf_len, 0);
         printf("End os block\n");
     }
     else if (strcmp(cmd_id, "GetDiskData") == 0)
