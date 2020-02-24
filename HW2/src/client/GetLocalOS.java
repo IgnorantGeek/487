@@ -3,23 +3,22 @@ package client;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class GetLocalOS
 {
-    ArrayList<c_char> OS;
+    c_char[] OS;
     c_char valid;
 
     public GetLocalOS()
     {
-        this.OS = new ArrayList<c_char>();
+        this.OS = new c_char[16];
         this.valid = new c_char();
     }
 
     public void execute(String IP, int Port)
     {
         // Create the buffer to contact C server
-        int length = 17;
+        int length = OS.length + valid.getSize();
         byte[] header = new byte[104];
         byte[] buffer = new byte[length];
 
@@ -57,23 +56,12 @@ public class GetLocalOS
             outStream.write(buffer, 0, buffer.length);
             outStream.flush();
 
-            System.out.println(buffer.length);
-
             // Read back the buffer with the payload
             byte[] payload = new byte[104+length];
             inStream.readFully(payload);
-
-            // Set the values
-            for (int i = 0; i < payload.length; i++)
-            {
-                System.out.println((char) payload[i]);
-            }
+            
             this.valid.setValue(payload[payload.length-1]);
 
-            // for (c_char c : this.OS)
-            // {
-            //     System.out.print(c.getValue());
-            // }
             System.out.println(this.valid);
 
             // Close the socket

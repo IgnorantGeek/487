@@ -27,9 +27,9 @@ public class Test
             return;
         }
         GetLocalTime time = new GetLocalTime();
-        //GetLocalOS os = new GetLocalOS();
-
-        //os.execute("127.0.0.1", 1069);
         time.execute(IP, port);
+        GetLocalOS os = new GetLocalOS();
+
+        os.execute(IP, port);
     }
 }

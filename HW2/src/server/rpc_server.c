@@ -185,6 +185,7 @@ void * process_command(void * arg)
         buffer[16] = os.valid;
         send(client_socket, header, 104, 0);
         send(client_socket, buffer, sizeof(buffer), 0);
+        printf("End os block\n");
     }
     else if (strcmp(cmd_id, "GetDiskData") == 0)
     {
