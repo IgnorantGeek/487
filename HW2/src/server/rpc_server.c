@@ -198,4 +198,6 @@ void * process_command(void * arg)
     
     free(buffer);
     free(cmd_id);
+
+    pthread_exit(NULL);
 }

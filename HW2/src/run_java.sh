@@ -1,2 +1,2 @@
 javac client/Test.java
-java client.Test
+java client.Test $1 $2

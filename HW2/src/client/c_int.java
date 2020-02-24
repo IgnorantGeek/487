@@ -40,11 +40,6 @@ public class c_int
 
     public void setValue(int i)
     {
-        byte[] hold = new byte[4];
-        hold[0] = (byte) (i >> 24);
-        hold[1] = (byte) (i >> 16);
-        hold[2] = (byte) (i >> 8);
-        hold[3] = (byte) (i /*>> 0*/);
-        this.buf = hold;
+        this.buf = Defaults.toBytes(i);
     }
 }
