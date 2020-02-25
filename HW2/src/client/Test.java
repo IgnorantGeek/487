@@ -26,8 +26,8 @@ public class Test
             System.out.println("Usage -- Test (default) || Test <port> || Test <hostname> <port>");
             return;
         }
-        // GetLocalTime time = new GetLocalTime();
-        // time.execute(IP, port);
+        GetLocalTime time = new GetLocalTime();
+        time.execute(IP, port);
         
         GetLocalOS os = new GetLocalOS();
         os.execute(IP, port);

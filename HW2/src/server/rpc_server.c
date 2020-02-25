@@ -145,7 +145,6 @@ void * process_command(void * arg)
     {
         char buffer[buf_len];
         bzero(buffer, buf_len);
-        printf("Entered get local time block\n");
         // run Get local time
         GET_LOCAL_TIME lt;
         memset(&lt, 0, sizeof(lt));
@@ -161,7 +160,6 @@ void * process_command(void * arg)
     {
         char buffer[104+buf_len];
         bzero(buffer, buf_len);
-        printf("Entered get local os block\n");
         // run get local os
         GET_LOCAL_OS os;
         memset(&os, 0, sizeof(os));
@@ -169,7 +167,6 @@ void * process_command(void * arg)
         memcpy(buffer, header, 104);
         memcpy(buffer+104, os.OS, 16);
         buffer[104+buf_len-1] = os.valid;
-        printf("%s\n", buffer);
         send(client_socket, buffer, 104+buf_len, 0);
     }
     else if(strstr((const char *)header, "GetDiskData") != NULL)
