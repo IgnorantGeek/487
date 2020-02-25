@@ -4,7 +4,10 @@ public class c_char
 {
     byte buf;
 
-    public c_char() { }
+    public c_char() 
+    {
+        this.buf = 0;
+    }
 
     public c_char(byte b)
     {

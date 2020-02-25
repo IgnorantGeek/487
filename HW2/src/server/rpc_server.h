@@ -18,7 +18,7 @@
 // Struct definitions
 typedef struct
 {
-    int time;
+    unsigned int time;
     char valid;
 } GET_LOCAL_TIME;
 
@@ -30,9 +30,9 @@ typedef struct
 
 typedef struct
 {
-    int DiskNumber;
-    int Cylinder;
-    int Sector;
+    unsigned int DiskNumber;
+    unsigned int Cylinder;
+    unsigned int Sector;
     char Status;
 } GET_DISK_DATA;
 

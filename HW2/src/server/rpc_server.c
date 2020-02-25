@@ -115,10 +115,9 @@ void getLocalTime(GET_LOCAL_TIME *lt)
 
 void getLocalOs(GET_LOCAL_OS *os)
 {
-    struct utsname uts;
-    memset(&uts, 0, sizeof(uts));
-    os->valid = uname(&uts);
-    memcpy(os->OS, uts.sysname, sizeof(uts.sysname));
+    bzero(os->OS, 16);
+    memcpy(os->OS, "Linux", 6);
+    os->valid = '1';
 }
 
 // Convert a 32 bit integer to bytes
@@ -134,33 +133,18 @@ void * process_command(void * arg)
 {
     int client_socket = *((int *) arg);
     char header[104];
-    receive_bytes(client_socket, header, 104);
-
-    int cmd_len = 0;
-    for (int i = 0; i < 104; i++)
-    {
-        if (header[i] != '0') cmd_len++;
-        else break;
-    }
-
-    char * cmd_id = (char *) malloc(cmd_len);
-    memcpy(cmd_id, header, cmd_len);
-
-    printf("Command - %s\n", cmd_id);
+    bzero(header, 104);
+    read(client_socket, header, 104);
 
     char buf_len_in_bytes[4];
     memcpy(buf_len_in_bytes, header+100, 4);
     int buf_len = toInteger32_be(buf_len_in_bytes);
-
-    // Allocate the buffer
-    char * buffer = (char *) malloc(buf_len);
-
-    // Read the buffer in (we don't really do anything with this)
-    receive_bytes(client_socket, buffer, buf_len);
     
     // Check command ID
-    if (strcmp(cmd_id, "GetLocalTime") == 0)
+    if(strstr((const char *)header, "GetLocalTime") != NULL)
     {
+        char buffer[buf_len];
+        bzero(buffer, buf_len);
         printf("Entered get local time block\n");
         // run Get local time
         GET_LOCAL_TIME lt;
@@ -173,31 +157,30 @@ void * process_command(void * arg)
         send(client_socket, header, 104, 0);
         send(client_socket, buffer, buf_len, 0);
     }
-    else if (strcmp(cmd_id, "GetLocalOS") == 0)
+    else if(strstr((const char *)header, "GetLocalOS") != NULL)
     {
+        char buffer[104+buf_len];
+        bzero(buffer, buf_len);
         printf("Entered get local os block\n");
         // run get local os
         GET_LOCAL_OS os;
         memset(&os, 0, sizeof(os));
         getLocalOs(&os);
-        memset(os.OS, 0, 16);
-        memcpy(buffer, os.OS, 16);
-        buffer[16] = os.valid;
-        send(client_socket, header, 104, 0);
-        send(client_socket, buffer, buf_len, 0);
+        memcpy(buffer, header, 104);
+        memcpy(buffer+104, os.OS, 16);
+        buffer[104+buf_len-1] = os.valid;
+        printf("%s\n", buffer);
+        send(client_socket, buffer, 104+buf_len, 0);
     }
-    else if (strcmp(cmd_id, "GetDiskData") == 0)
+    else if(strstr((const char *)header, "GetDiskData") != NULL)
     {
         // run get disk data
     }
     else
     {
-        printf("COMMAND ERROR: No command with id: %s\n", cmd_id);
+        printf("COMMAND ERROR: could not find specified command");
         exit(EXIT_FAILURE);
     }
-    
-    free(buffer);
-    free(cmd_id);
 
     pthread_exit(NULL);
 }

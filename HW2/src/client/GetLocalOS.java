@@ -62,7 +62,22 @@ public class GetLocalOS
 
             this.valid.setValue(payload[104+length-1]);
 
-            System.out.println("OS valid flag: " + this.valid.getValue());
+            int offset = 0;
+            for (int i = 104; i < payload.length; i++)
+            {
+                if (payload[i] != 0)
+                {
+                    this.OS[offset].setValue((char) payload[i]);
+                    offset++;
+                }
+                else break;
+            }
+            System.out.println("OS Value: ");
+            // for (c_char c : this.OS)
+            // {
+            //     System.out.print(c.getValue());    
+            // }
+            System.out.println("\nOS valid flag: " + this.valid.getValue());
             // Close the socket
             server.close();
             inStream.close();
