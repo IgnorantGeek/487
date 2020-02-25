@@ -61,7 +61,7 @@ public class GetLocalOS
             inStream.readFully(payload);
 
             this.valid.setValue(payload[104+length-1]);
-            
+
             System.out.println("OS valid flag: " + this.valid.getValue());
             // Close the socket
             server.close();
