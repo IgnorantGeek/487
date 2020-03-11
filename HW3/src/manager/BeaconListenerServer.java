@@ -23,7 +23,6 @@ public class BeaconListenerServer extends BeaconListenerImpl
 
             // reg.bind("BeaconListener", stub);
         }
-
         catch (Exception e) 
         {
             System.err.println("Server exception: " + e.toString()); 
