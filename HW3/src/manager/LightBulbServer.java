@@ -30,7 +30,7 @@ public class LightBulbServer
 			{
 				if (stub.isOn()) System.out.println("Fuck yeah");
 			}
-		} 
+		}
 		catch (Exception e)
 		{
 			System.err.println ("Error - " + e);
