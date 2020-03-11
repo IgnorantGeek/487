@@ -7,13 +7,14 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class LightBulbServer
 {
-
-	public static void main(String[] args) {
-		try {   
+	public static void main(String[] args)
+	{
+		try
+		{
 			RMILightBulbImpl obj = new RMILightBulbImpl();
-			RMILightBulb stub = (RMILightBulb) UnicastRemoteObject.exportObject(obj, 0);   
-			//RemoteRef location = bulbService.getRef();   
-			//System.out.println (location.remoteToString());   
+			RMILightBulb stub = (RMILightBulb) UnicastRemoteObject.exportObject(obj, 0);
+			//RemoteRef location = bulbService.getRef();
+			//System.out.println (location.remoteToString());
 			
 			// Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
@@ -29,10 +30,13 @@ public class LightBulbServer
 			{
 				if (stub.isOn()) System.out.println("Fuck yeah");
 			}
-			} catch (Exception e) { System.err.println ("Error - " + e); 
-			} 
 		} 
+		catch (Exception e)
+		{
+			System.err.println ("Error - " + e);
+		}
 	}
+}
 	
 
 
