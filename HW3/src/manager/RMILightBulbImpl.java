@@ -12,7 +12,7 @@ public class RMILightBulbImpl implements RMILightBulb
 	
 	public void on() throws java.rmi.RemoteException
 	{
-		setBulb(true); 
+		setBulb(true);
 	}
 	
 	public void off() throws java.rmi.RemoteException
@@ -22,16 +22,16 @@ public class RMILightBulbImpl implements RMILightBulb
 	
 	public boolean isOn() throws java.rmi.RemoteException
 	{
-		return getBulb(); 
+		return getBulb();
 	}
 	
 	public void setBulb(boolean value)
 	{
-		lightOn = value; 
+		lightOn = value;
 	}
 	
 	public boolean getBulb()
 	{
-		return lightOn; 
+		return lightOn;
 	}
 }
