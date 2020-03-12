@@ -28,7 +28,7 @@ public class LightBulbServer
 			System.err.println("Server ready");
 			while (true)
 			{
-				if (stub.isOn()) System.out.println("Fuck yeah");
+				// keep the server live
 			}
 		}
 		catch (Exception e)
