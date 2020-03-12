@@ -23,24 +23,23 @@ public class LightBulbClient
 			Registry registry = LocateRegistry.getRegistry(host);
 			RMILightBulb stub = (RMILightBulb) registry.lookup("Light");
 			//RMILightBulb bulbService = (RMILightBulb)remoteService;   
-			stub.on();   
+			stub.on();
 			System.out.println ("Bulb state : " + stub.isOn()  );
-			System.out.println ("Invoking stub.off()");   
-			stub.off();   
-			System.out.println ("Bulb state : " + stub.isOn() );  
-			}
-			catch (NotBoundException nbe)
-			{
-				System.out.println ("No light bulb service available in registry!");  
-			}catch (RemoteException re)
-			{
-				System.out.println ("RMI - " + re);  
-			}
-			catch (Exception e)
-			{
-				System.out.println ("Error - " + e); 
-			}
+			System.out.println ("Invoking stub.off()");
+			stub.off();
+			System.out.println ("Bulb state : " + stub.isOn() );
+		}
+		catch (NotBoundException nbe)
+		{
+			System.out.println ("No light bulb service available in registry!");
+		}
+		catch (RemoteException re)
+		{
+			System.out.println ("RMI - " + re);  
+		}
+		catch (Exception e)
+		{
+			System.out.println ("Error - " + e); 
 		}
 	}
-
-
+}

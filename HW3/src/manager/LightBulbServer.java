@@ -21,7 +21,7 @@ public class LightBulbServer
             registry.bind("Light", stub);
 			/*String registry = "localhost"; // where the registry server locates   
 			if (args.length >=1) {    
-				registry = args[0];   
+				registry = args[0];
 				}   */
 			//String registration = "rmi://" + registry + "/RMILightBulb";   
 		//	Naming.rebind( registration, bulbService );
