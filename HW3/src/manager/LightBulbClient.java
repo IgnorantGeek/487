@@ -20,7 +20,7 @@ public class LightBulbClient
 			// Lookup and create the remote object
 			RMILightBulb stub = (RMILightBulb) registry.lookup("Light"); 
 
-			// Invoke object commands...
+			// Invoke remote object commands...
 			stub.on();
 			System.out.println ("Bulb state : " + stub.isOn()  );
 			System.out.println ("Invoking stub.off()");
