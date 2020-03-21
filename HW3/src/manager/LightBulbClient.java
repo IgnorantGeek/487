@@ -30,7 +30,7 @@ public class LightBulbClient
 		// Catch Exceptions
 		catch (NotBoundException nbe)
 		{
-			System.out.println ("No light bulb service available in registry!");
+			System.out.println ("Could not find the specified command in the registry.");
 		}
 		catch (RemoteException re)
 		{

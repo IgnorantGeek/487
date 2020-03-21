@@ -1,17 +1,22 @@
 package src.manager;
 
+import java.util.List;
+
 import src.misc.Beacon;
 
 public class BeaconListenerImp implements BeaconListener
 {
-    public BeaconListenerImp() throws java.rmi.RemoteException
+    private List<Beacon> beacons;
+
+    public BeaconListenerImp(List<Beacon> ref) throws java.rmi.RemoteException
     {
-        // need a reference to the place where we store the beacons
+        // Reference to a shared list to store beacons
+        this.beacons = ref;
     }
 
     public int deposit(Beacon b) throws java.rmi.RemoteException
     {
-
-        return 1;
+        this.beacons.add(b);
+        return 0;
     }
 }
