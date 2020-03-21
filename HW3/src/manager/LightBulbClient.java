@@ -14,21 +14,20 @@ public class LightBulbClient
 		String host = (args.length < 1) ? null : args[0];
 		try
 		{
-			/*String registry = "localhost"; // the registry server's IP   
-			if (args.length >=1) { 
-				registry = args[0]; 
-				}*/
-		//	String registration = "rmi://" + registry + "/RMILightBulb";
-		//	Remote remoteService = Naming.lookup(registration);
+			// Objectify the RMI registry
 			Registry registry = LocateRegistry.getRegistry(host);
-			RMILightBulb stub = (RMILightBulb) registry.lookup("Light");
-			//RMILightBulb bulbService = (RMILightBulb)remoteService;   
+
+			// Lookup and create the remote object
+			RMILightBulb stub = (RMILightBulb) registry.lookup("Light"); 
+
+			// Invoke object commands...
 			stub.on();
 			System.out.println ("Bulb state : " + stub.isOn()  );
 			System.out.println ("Invoking stub.off()");
 			stub.off();
 			System.out.println ("Bulb state : " + stub.isOn() );
 		}
+		// Catch Exceptions
 		catch (NotBoundException nbe)
 		{
 			System.out.println ("No light bulb service available in registry!");

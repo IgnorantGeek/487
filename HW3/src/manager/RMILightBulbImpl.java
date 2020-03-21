@@ -1,6 +1,5 @@
 package src.manager;
 
-//extends java.rmi.server.UnicastRemoteObject
 public class RMILightBulbImpl implements RMILightBulb
 {	
 	private boolean lightOn;

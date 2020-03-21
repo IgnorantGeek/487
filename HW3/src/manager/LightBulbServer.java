@@ -11,20 +11,19 @@ public class LightBulbServer
 	{
 		try
 		{
+			// Create the RMI object
 			RMILightBulbImpl obj = new RMILightBulbImpl();
+
+			// Export and initialize the object
 			RMILightBulb stub = (RMILightBulb) UnicastRemoteObject.exportObject(obj, 0);
-			//RemoteRef location = bulbService.getRef();
-			//System.out.println (location.remoteToString());
+
+			// Objectify the RMI registry
+			Registry registry = LocateRegistry.getRegistry();
 			
-			// Bind the remote object's stub in the registry
-            Registry registry = LocateRegistry.getRegistry();
-            registry.bind("Light", stub);
-			/*String registry = "localhost"; // where the registry server locates   
-			if (args.length >=1) {    
-				registry = args[0];
-				}   */
-			//String registration = "rmi://" + registry + "/RMILightBulb";   
-		//	Naming.rebind( registration, bulbService );
+			// Bind the command to a string
+			registry.bind("Light", stub);
+			
+			// Output server ready, and wait
 			System.err.println("Server ready");
 			while (true)
 			{
