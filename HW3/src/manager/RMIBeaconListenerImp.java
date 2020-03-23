@@ -16,7 +16,12 @@ public class RMIBeaconListenerImp implements RMIBeaconListener
 
     public int deposit(Beacon b) throws java.rmi.RemoteException
     {
-        this.beacons.add(b);
+        boolean newBeacon = true;
+        for (Beacon beacon : beacons)
+        {
+            if (b.getID() == beacon.getID()) newBeacon = false;  
+        }
+        if (newBeacon) this.beacons.add(b);
         return 0;
     }
 }
