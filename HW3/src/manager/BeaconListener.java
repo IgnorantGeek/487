@@ -45,6 +45,7 @@ public class BeaconListener extends Thread
 					System.out.println("New beacon recieved.");
 					beaconNum++;
 				}
+				sleep(5000);
 			}
 		}
 		catch (Exception e)
