@@ -1,9 +1,11 @@
 package src.misc;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Beacon
+public class Beacon implements Serializable
 {
+    private static final long serialVersionUID = 1L;
     private int ID;
     private int StartupTime;
     private String CmdAgentID;

@@ -31,10 +31,14 @@ public class BeaconSender extends Thread
 
             RMIBeaconListener listener = (RMIBeaconListener) registry.lookup("BeaconListener");
 
+            System.out.println("Initialization complete. Sending Beacon....");
+
             // Repeatedly deposit the beacon
             while (true)
             {
                 listener.deposit(this.beacon);
+
+                System.out.println("Beacon sent.");
 
                 // Wait a minute and do it again
                 sleep(60000);

@@ -35,10 +35,16 @@ public class BeaconListener extends Thread
 			
 			// Output server ready, and wait
             System.err.println("Server ready");
-            
+			
+			int beaconNum = 0;
 			while (true)
 			{
 				// keep the server live
+				if (this.beacons.size() > beaconNum)
+				{
+					System.out.println("New beacon recieved.");
+					beaconNum++;
+				}
 			}
 		}
 		catch (Exception e)
