@@ -4,7 +4,7 @@ import java.util.List;
 
 import src.misc.Beacon;
 
-public class Manager
+public class Manager extends Thread
 {
     public List<Beacon> beacons;
 
@@ -21,5 +21,18 @@ public class Manager
     public void GetLocalTime()
     {
         // Get the local time of the client
+    }
+
+    public void run()
+    {
+        try
+		{
+            // manager main thread. Check for new beacons,
+            // and contact the client over RMI
+		}
+		catch (Exception e)
+		{
+			System.err.println ("Manager Error - " + e);
+		}
     }
 }

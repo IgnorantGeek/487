@@ -4,7 +4,7 @@ import java.util.List;
 
 import src.misc.Beacon;
 
-public class BeaconListenerImp implements BeaconListener
+public class BeaconListenerImp implements RMIBeaconListener
 {
     private List<Beacon> beacons;
 
