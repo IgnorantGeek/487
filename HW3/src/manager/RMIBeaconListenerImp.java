@@ -4,11 +4,11 @@ import java.util.List;
 
 import src.misc.Beacon;
 
-public class BeaconListenerImp implements RMIBeaconListener
+public class RMIBeaconListenerImp implements RMIBeaconListener
 {
     private List<Beacon> beacons;
 
-    public BeaconListenerImp(List<Beacon> ref) throws java.rmi.RemoteException
+    public RMIBeaconListenerImp(List<Beacon> ref) throws java.rmi.RemoteException
     {
         // Reference to a shared list to store beacons
         this.beacons = ref;

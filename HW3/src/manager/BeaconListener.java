@@ -22,7 +22,7 @@ public class BeaconListener extends Thread
 		try
 		{
 			// Create the RMI object
-			BeaconListenerImp obj = new BeaconListenerImp(beacons);
+			RMIBeaconListenerImp obj = new RMIBeaconListenerImp(beacons);
 
 			// Export and initialize the object
 			RMIBeaconListener stub = (RMIBeaconListener) UnicastRemoteObject.exportObject(obj, 0);
