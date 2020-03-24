@@ -51,11 +51,11 @@ public class BeaconSender extends Thread
 		}
 		catch (RemoteException re)
 		{
-			System.out.println ("RMI - " + re);  
+			System.out.println ("RMI - " + re);
 		}
 		catch (Exception e)
 		{
-			System.out.println ("Error - " + e); 
+			System.out.println ("Error - " + e);
 		}
     }
 }
