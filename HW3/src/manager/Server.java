@@ -16,7 +16,7 @@ public class Server
         BeaconListener listener = new BeaconListener(beacons);
 
         // Run the threads
-        manager.start();
         listener.start();
+        manager.start();
     }
 }

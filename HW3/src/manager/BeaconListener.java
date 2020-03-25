@@ -34,19 +34,12 @@ public class BeaconListener extends Thread
 			registry.bind("BeaconListener", stub);
 			
 			// Output server ready, and wait
-            System.err.println("Server ready");
+			System.err.println("Server ready");
 			
-			int beaconNum = 0;
-			while (true)
-			{
-				// keep the server live
-				if (this.beacons.size() > beaconNum)
-				{
-					System.out.println("New beacon recieved.");
-					beaconNum++;
-				}
-				sleep(5000);
-			}
+			// while (true)
+			// {
+			// 	// do we need to keep the server live?
+			// }
 		}
 		catch (Exception e)
 		{

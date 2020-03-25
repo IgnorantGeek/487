@@ -27,8 +27,18 @@ public class Manager extends Thread
     {
         try
 		{
-            // manager main thread. Check for new beacons,
-            // and contact the client over RMI
+            int beaconNum = 0;
+            while (true)
+            {
+				// keep the server live
+				if (this.beacons.size() > beaconNum)
+				{
+					System.out.println("New beacon recieved.");
+					beaconNum++;
+				}
+				sleep(5000);
+            }
+
 		}
 		catch (Exception e)
 		{
