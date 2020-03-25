@@ -12,14 +12,9 @@ public class BeaconSender extends Thread
 {
     public Beacon beacon;
 
-    public BeaconSender()
+    public BeaconSender(Beacon ref)
     {
-        this.beacon = new Beacon();
-    }
-
-    public BeaconSender(String CmdAgentID)
-    {
-        this.beacon = new Beacon(CmdAgentID);
+        this.beacon = ref;
     }
 
     public void run()
@@ -27,7 +22,7 @@ public class BeaconSender extends Thread
         try
         {
             // Get the registry
-            Registry registry = LocateRegistry.getRegistry(null);
+            Registry registry = LocateRegistry.getRegistry();
 
             RMIBeaconListener listener = (RMIBeaconListener) registry.lookup("BeaconListener");
 

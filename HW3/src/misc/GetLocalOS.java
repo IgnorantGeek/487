@@ -1,7 +1,13 @@
-package src.agent;
+package src.misc;
 
-public class GetLocalOS
+import java.io.Serializable;
+
+public class GetLocalOS implements Serializable
 {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     char[] OS = new char[16];
     char valid;
 

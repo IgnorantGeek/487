@@ -1,7 +1,13 @@
-package src.agent;
+package src.misc;
 
-public class GetLocalTime
+import java.io.Serializable;
+
+public class GetLocalTime implements Serializable
 {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     int time;
     char valid;
 

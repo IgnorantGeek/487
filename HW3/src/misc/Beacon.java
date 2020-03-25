@@ -15,15 +15,7 @@ public class Beacon implements Serializable
         Random rand = new Random();
         this.ID = rand.nextInt(1000000);
         this.StartupTime = (int) System.currentTimeMillis();
-        this.CmdAgentID = new String();
-    }
-
-    public Beacon(String cmdString)
-    {
-        Random rand = new Random();
-        this.ID = rand.nextInt(1000000);
-        this.StartupTime = (int) System.currentTimeMillis();
-        this.CmdAgentID = new String(cmdString);
+        this.CmdAgentID = "CmdAgent" + ID;
     }
 
     /**
