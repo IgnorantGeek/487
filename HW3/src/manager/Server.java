@@ -10,10 +10,11 @@ public class Server
     {
         // Create the beacons arraylist reference
         ArrayList<Beacon> beacons = new ArrayList<Beacon>();
+        ArrayList<Long> lastContact = new ArrayList<Long>();
 
         // Initialize the manager and listener
-        Manager manager = new Manager(beacons);
-        BeaconListener listener = new BeaconListener(beacons);
+        Manager manager = new Manager(beacons, lastContact);
+        BeaconListener listener = new BeaconListener(beacons, lastContact);
 
         // Run the threads
         listener.start();

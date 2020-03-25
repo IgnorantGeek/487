@@ -10,11 +10,13 @@ import src.misc.Beacon;
 
 public class BeaconListener extends Thread
 {
-	List<Beacon> beacons;
+	private List<Beacon> beacons;
+	private List<Long> lastContact;
 
-	public BeaconListener(List<Beacon> ref)
+	public BeaconListener(List<Beacon> beacons, List<Long> lastContact)
 	{
-		this.beacons = ref;
+		this.beacons = beacons;
+		this.lastContact = lastContact;
 	}
 
 	public void run()
@@ -22,7 +24,7 @@ public class BeaconListener extends Thread
 		try
 		{
 			// Create the RMI object
-			RMIBeaconListenerImp obj = new RMIBeaconListenerImp(beacons);
+			RMIBeaconListenerImp obj = new RMIBeaconListenerImp(beacons, lastContact);
 
 			// Export and initialize the object
 			RMIBeaconListener stub = (RMIBeaconListener) UnicastRemoteObject.exportObject(obj, 0);

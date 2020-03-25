@@ -7,21 +7,31 @@ import src.misc.Beacon;
 public class RMIBeaconListenerImp implements RMIBeaconListener
 {
     private List<Beacon> beacons;
+    private List<Long> lastContact;
 
-    public RMIBeaconListenerImp(List<Beacon> ref) throws java.rmi.RemoteException
+    public RMIBeaconListenerImp(List<Beacon> beacons, List<Long> lastContact) throws java.rmi.RemoteException
     {
         // Reference to a shared list to store beacons
-        this.beacons = ref;
+        this.beacons = beacons;
+        this.lastContact = lastContact;
     }
 
     public int deposit(Beacon b) throws java.rmi.RemoteException
     {
         boolean newBeacon = true;
-        for (Beacon beacon : beacons)
+        for (int i = 0; i < beacons.size(); i++)
         {
-            if (b.getID() == beacon.getID()) newBeacon = false;  
+            if (b.getID() == beacons.get(i).getID())
+            {
+                newBeacon = false;
+                lastContact.set(i, System.currentTimeMillis());
+            }
         }
-        if (newBeacon) this.beacons.add(b);
+        if (newBeacon) 
+        {
+            beacons.add(b);
+            lastContact.add(System.currentTimeMillis());
+        }
         return 0;
     }
 }
