@@ -48,7 +48,7 @@ void int_to_bytes(char bytes[4], int32_t n)
 // Convert an ip as a string to 4 bytes
 void ip4_to_bytes(unsigned char buffer[4], char * ip_addr)
 {
-    sscanf(ip_addr, "%d.%d.%d.%d", &buffer[0], &buffer[1], &buffer[2], &buffer[3]);
+    sscanf(ip_addr, "%d.%d.%d.%d", (int *) &buffer[0], (int *) &buffer[1], (int *) &buffer[2], (int *) &buffer[3]);
 }
 
 void get_ip_4(char addr[16])
