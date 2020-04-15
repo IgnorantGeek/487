@@ -4,7 +4,24 @@ int main()
 {
     char ID[16];
     rand_str(ID, 16);
-    printf("%s\n", ID);
+    struct HEADER header;
+    memset(&header, 0, sizeof(header));
+    init_header(ID, PING, 10, 25, &header);
+
+    char header_byte[23];
+    memset(header_byte, 0, 23);
+
+    serialize_header(&header, header_byte);
+
+    struct HEADER header2;
+    memset(&header2, 0, sizeof(header2));
+    header2.pl_length = 69;
+    init_header("sssssssssssssss", PONG, 10, 69, &header2);
+
+    printf("Header ID value before write: %s\n%d\n\n", header2.ID, header2.pl_length);
+    deserialize_header(header_byte, &header2);
+    printf("Header ID value before write: %s\n%d\n", header2.ID ,header2.pl_length);
+    
     return 0;
 }
 
@@ -20,10 +37,7 @@ void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct
 void serialize_header(struct HEADER * header, char bytes[23])
 {
     // Descriptor ID write
-    for (int i = 0; i < 16; i++)
-    {
-        bytes[i] = header->ID[i];
-    }
+    memcpy(bytes, header->ID, 16);
 
     // single byte writes
     bytes[16] = header->pl_descriptor;
@@ -32,11 +46,24 @@ void serialize_header(struct HEADER * header, char bytes[23])
 
     // pl_length write
     char pl_len_bytes[4];
+    memset(pl_len_bytes, 0, 4);
     int_to_bytes_be(pl_len_bytes, header->pl_length);
-    bytes[19] = pl_len_bytes[0];
-    bytes[20] = pl_len_bytes[1];
-    bytes[21] = pl_len_bytes[2];
-    bytes[22] = pl_len_bytes[3];
+    memcpy(bytes + 18, pl_len_bytes, 4);
+}
+
+void deserialize_header(char bytes[23], struct HEADER * header)
+{
+    for (int i = 0; i < 16; i++)
+    {
+        header->ID[i] = bytes[i];
+    }
+    header->pl_descriptor = bytes[16];
+    header->TTL = bytes[17];
+    header->Hops = bytes[18];
+    char pl_len_bytes[4];
+    memset(pl_len_bytes, 0, 4);
+    memcpy(pl_len_bytes, bytes + 18, 4);
+    header->pl_length = toInteger32_be(pl_len_bytes);
 }
 
 
