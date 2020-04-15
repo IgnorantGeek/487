@@ -36,13 +36,22 @@ int toInteger32_be(char *bytes)
     return tmp;
 }
 
-// Convert a 32 bit integer to bytes
-void int_to_bytes(char bytes[4], int32_t n)
+// Convert a 32 bit integer to bytes in big endian format
+void int_to_bytes_be(char bytes[4], int32_t n)
 {
     bytes[0] = (n >> 24) & 0xFF;
     bytes[1] = (n >> 16) & 0xFF;
     bytes[2] = (n >> 8) & 0xFF;
     bytes[3] = n & 0xFF;
+}
+
+// Convert a 32 bit integer to bytes in little endian format
+void int_to_bytes_le(char bytes[4], int32_t n)
+{
+    bytes[0] = n & 0xff;
+    bytes[1] = (n >> 8) & 0xff;
+    bytes[2] = (n >> 16) & 0xff;
+    bytes[3] = (n >> 24) & 0xff;
 }
 
 // Convert an ip as a string to 4 bytes
@@ -59,11 +68,14 @@ void get_ip_4(char addr[16])
 
     getifaddrs(&ifAddrStruct);
 
-    for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
-        if (!ifa->ifa_addr) {
+    for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next)
+    {
+        if (!ifa->ifa_addr)
+        {
             continue;
         }
-        if (ifa->ifa_addr->sa_family == AF_INET) { // check it is IP4
+        if (ifa->ifa_addr->sa_family == AF_INET) // check it is IP4
+        { 
             // is a valid IP4 Address
             tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
             char addressBuffer[INET_ADDRSTRLEN];
