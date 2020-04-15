@@ -98,3 +98,26 @@ void get_ip_4(char addr[16])
     }
     if (ifAddrStruct!=NULL) freeifaddrs(ifAddrStruct);
 }
+
+// Recieve a single byte from the socket
+void receive_one_byte(int client_socket, char *cur_char)
+{
+    ssize_t bytes_received = 0;
+    while (bytes_received != 1)
+    {
+        bytes_received = recv(client_socket, cur_char, 1, 0);
+    }
+}
+
+// Recieve n bytes from the socket into a buffer
+void receive_bytes(int client_socket, char * buffer, int n)
+{
+    char *cur_char = buffer;
+    ssize_t bytes_received = 0;
+    while (bytes_received != n)
+    {
+        receive_one_byte(client_socket, cur_char);
+        cur_char++;
+        bytes_received++;
+    }
+}

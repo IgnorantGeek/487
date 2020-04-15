@@ -38,5 +38,7 @@ void int_to_bytes_be(char bytes[4], int32_t n);
 void int_to_bytes_le(char bytes[4], int32_t n);
 void ip4_to_bytes(unsigned char buffer[4], char * ip_addr);
 void get_ip_4(char addr[16]);
+void receive_one_byte(int client_socket, char *cur_char);
+void receive_bytes(int client_socket, char * buffer, int n);
 
 #endif
