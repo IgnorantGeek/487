@@ -2,7 +2,9 @@
 
 int main()
 {
-    printf("%s\n", VERSION);
+    char ID[16];
+    rand_str(ID, 16);
+    printf("%s\n", ID);
     return 0;
 }
 
@@ -39,12 +41,19 @@ void serialize_header(struct HEADER * header, char bytes[23])
 
 
 // generate a random ID
-void generate_id(char ID[16])
+static char * rand_str(char * str, size_t size)
 {
-    static const char alphanum[] =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (int i = 0; i < 16; ++i)
+    srand(time(NULL));
+    const char charset[] = 
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    if (size)
     {
-        ID[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+        --size;
+        for (size_t n = 0; n < size; n++) {
+            int key = rand() % (int) (sizeof charset - 1);
+            str[n] = charset[key];
+        }
+        str[size] = '\0';
     }
+    return str;
 }

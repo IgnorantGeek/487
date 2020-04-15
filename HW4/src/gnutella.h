@@ -1,7 +1,6 @@
 #ifndef GNUTELLA_H
  #define GNUTELLA_H
-
-// Header file for the gnutella node project
+ 
 #include "defaults.h"
 
 #define VERSION "0.4"
@@ -11,7 +10,7 @@
 #define QUERY 0x80
 #define QUERYHIT 0x81
 
-
+// A struct to hold the header to send over gnutella
 struct HEADER
 {
     char ID[16];
@@ -26,6 +25,6 @@ void serialize_header(struct HEADER * header, char bytes[23]);
 void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct HEADER * header);
 void send_header(char header[23]);
 void send_payload(char * pl, int pl_length);
-void generate_id(char ID[16]);
+static char * rand_str(char *dest, size_t length);
 
 #endif
