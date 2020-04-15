@@ -40,7 +40,7 @@ void serialize_header(struct HEADER * header, char bytes[23])
 }
 
 
-// generate a random ID
+// generate a random string
 static char * rand_str(char * str, size_t size)
 {
     srand(time(NULL));
@@ -49,7 +49,8 @@ static char * rand_str(char * str, size_t size)
     if (size)
     {
         --size;
-        for (size_t n = 0; n < size; n++) {
+        for (size_t n = 0; n < size; n++)
+        {
             int key = rand() % (int) (sizeof charset - 1);
             str[n] = charset[key];
         }
