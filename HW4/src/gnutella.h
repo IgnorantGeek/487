@@ -2,8 +2,6 @@
  #define GNUTELLA_H
 
 // Header file for the gnutella node project
-#include <stdio.h>
-#include <stdlib.h>
 #include "defaults.h"
 
 #define VERSION "0.4"
@@ -17,15 +15,18 @@
 struct HEADER
 {
     char ID[16];
-    char payload_descriptor;
+    char pl_descriptor;
     unsigned char TTL;
     unsigned char Hops;
-    int32_t payload_length;
+    int32_t pl_length;
 };
 
 
 
 // need to implement 5 methods: Ping, Pong, Query, QueryHit, and Push
-void serialize_header(struct HEADER, char bytes[23]);
+void serialize_header(struct HEADER * header, char bytes[23]);
+void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct HEADER * header);
+void send_header(char header[23]);
+void send_payload(char * pl, int pl_length);
 
 #endif
