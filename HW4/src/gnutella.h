@@ -22,8 +22,6 @@ struct HEADER
 };
 
 
-
-// need to implement 5 methods: Ping, Pong, Query, QueryHit, and Push
 void serialize_header(struct HEADER * header, char bytes[23]);
 void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct HEADER * header);
 void send_header(char header[23]);
