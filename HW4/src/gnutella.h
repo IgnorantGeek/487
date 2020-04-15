@@ -28,5 +28,6 @@ void serialize_header(struct HEADER * header, char bytes[23]);
 void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct HEADER * header);
 void send_header(char header[23]);
 void send_payload(char * pl, int pl_length);
+void generate_id(char ID[16]);
 
 #endif

@@ -36,3 +36,15 @@ void serialize_header(struct HEADER * header, char bytes[23])
     bytes[21] = pl_len_bytes[2];
     bytes[22] = pl_len_bytes[3];
 }
+
+
+// generate a random ID
+void generate_id(char ID[16])
+{
+    static const char alphanum[] =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (int i = 0; i < 16; ++i)
+    {
+        ID[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
+    }
+}
