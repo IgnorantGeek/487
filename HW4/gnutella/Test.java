@@ -1,8 +1,10 @@
 package gnutella;
 
+import java.net.InetAddress;
+
 public class Test
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         Header h1 = new Header("123456789abcdef", Macro.PING, 255, 0, 400);
         
@@ -12,5 +14,7 @@ public class Test
 
         System.out.println(h2.ID);
         System.out.println(h2.TTL);
+        InetAddress ip = Macro.getCurrentIp();
+        System.out.println(ip.getHostAddress());
     }
 }
