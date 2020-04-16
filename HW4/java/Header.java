@@ -29,7 +29,7 @@ public class Header
         {
             serial[i] = ID_byte[i];
         }
-        
+
         serial[16] = (byte) pl_descriptor;
         serial[17] = (byte) TTL;
         serial[18] = (byte) Hops;
@@ -44,10 +44,25 @@ public class Header
 
     public static Header deserialize(byte[] data)
     {
-        Header in = new Header();
+        byte[] buf1 = new byte[16];
+        for (int i = 0; i < 16; i++)
+        {
+            buf1[i] = data[i];
+        }
+        String id = new String(buf1);
+        
+        int pld = data[16] & 0xFF;
+        int ttl = data[17] & 0xFF;
+        int hop = data[18] & 0xFF;
 
+        byte[] buf2 = new byte[4];
+        for (int i = 0; i < 4; i++)
+        {
+            buf2[i] = data[i + 18];
+        }
 
+        int pl_len = Macro.toInteger(buf2);
 
-        return in;
+        return new Header(id, pld, ttl, hop, pl_len);
     }
 }
