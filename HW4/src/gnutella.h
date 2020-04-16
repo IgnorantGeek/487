@@ -2,6 +2,7 @@
  #define GNUTELLA_H
  
 #include "defaults.h"
+#include <vector>
 
 #define VERSION "0.4"
 #define PING 0x00

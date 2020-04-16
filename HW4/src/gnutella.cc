@@ -15,6 +15,8 @@ int main()
     
     process_header(&header);
 
+    std::vector<NEIGHBOR> neighbors;
+
     return 0;
 }
 
