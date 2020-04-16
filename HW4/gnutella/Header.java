@@ -1,4 +1,4 @@
-package java;
+package gnutella;
 
 public class Header
 {

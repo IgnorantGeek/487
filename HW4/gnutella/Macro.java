@@ -1,4 +1,4 @@
-package java;
+package gnutella;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
