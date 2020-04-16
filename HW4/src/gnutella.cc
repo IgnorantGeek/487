@@ -7,24 +7,13 @@ int main()
     rand_str(ID, 16);
     struct HEADER header;
     memset(&header, 0, sizeof(header));
-    init_header(ID, QUERYHIT, 10, 25, &header);
-
-    char header_byte[23];
-    memset(header_byte, 0, 23);
-
-    serialize_header(&header, header_byte);
-
-    struct HEADER header2;
-    memset(&header2, 0, sizeof(header2));
-    header2.pl_length = 69;
-    init_header("sssssssssssssss", PONG, 10, 69, &header2);
+    init_header(ID, PING, 10, 25, &header);
 
     // printf("Header ID value before write: %s\n%d\n\n", header2.ID, header2.pl_length);
     // deserialize_header(header_byte, &header2);
     // printf("Header ID value before write: %s\n%d\n", header2.ID ,header2.pl_length);
     
     process_header(&header);
-    printf("%d\n", header.pl_descriptor);
 
     return 0;
 }

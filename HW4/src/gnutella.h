@@ -20,6 +20,13 @@ struct HEADER
     int32_t pl_length;
 };
 
+struct NEIGHBOR
+{
+    char ID[16];
+    char IP[4];
+    int32_t port;
+};
+
 
 void serialize_header(struct HEADER * header, char bytes[23]);
 void deserialize_header(char bytes[23], struct HEADER * header);

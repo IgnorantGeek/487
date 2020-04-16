@@ -1,4 +1,4 @@
-CXX      := -gcc
+CXX      := -g++
 CXXFLAGS := -pedantic-errors -Wall
 LDFLAGS  := -L/usr/lib -lm
 BUILD    := .
@@ -6,13 +6,13 @@ OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)
 TARGET   := gnutella
 INCLUDE  := -Iinclude/
-SRC      := $(wildcard *.c)
+SRC      := $(wildcard *.cc)
 
-OBJECTS := $(SRC:%.c=$(OBJ_DIR)/%.o)
+OBJECTS := $(SRC:%.cc=$(OBJ_DIR)/%.o)
 
 all: build $(APP_DIR)/$(TARGET)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.cc
 	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
 
