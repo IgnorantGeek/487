@@ -1,12 +1,13 @@
 #include "gnutella.h"
 
+// Entry point
 int main()
 {
     char ID[16];
     rand_str(ID, 16);
     struct HEADER header;
     memset(&header, 0, sizeof(header));
-    init_header(ID, PING, 10, 25, &header);
+    init_header(ID, QUERYHIT, 10, 25, &header);
 
     char header_byte[23];
     memset(header_byte, 0, 23);
@@ -18,14 +19,17 @@ int main()
     header2.pl_length = 69;
     init_header("sssssssssssssss", PONG, 10, 69, &header2);
 
-    printf("Header ID value before write: %s\n%d\n\n", header2.ID, header2.pl_length);
-    deserialize_header(header_byte, &header2);
-    printf("Header ID value before write: %s\n%d\n", header2.ID ,header2.pl_length);
+    // printf("Header ID value before write: %s\n%d\n\n", header2.ID, header2.pl_length);
+    // deserialize_header(header_byte, &header2);
+    // printf("Header ID value before write: %s\n%d\n", header2.ID ,header2.pl_length);
     
+    process_header(&header);
+    printf("%d\n", header.pl_descriptor);
+
     return 0;
 }
 
-// Initialize the header
+// Initialize a header
 void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct HEADER * header)
 {
     for (int i = 0; i < 16; i++) header->ID[i] = ID[i];
@@ -34,6 +38,28 @@ void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct
     header->pl_length = pl_length;
 }
 
+// Process the incoming header
+void process_header(struct HEADER * header)
+{
+    switch (header->pl_descriptor)
+    {
+        case PING:
+            printf("We gotta ping here.\n");
+            break;
+        case PONG:
+            printf("Ayyyye PONG boi here.\n");
+            break;
+        case QUERY:
+            break;
+        case QUERYHIT:
+            printf("query hit\n");
+            break;
+        case PUSH:
+            break;
+    }
+}
+
+// Serialize a header for transmission over data stream
 void serialize_header(struct HEADER * header, char bytes[23])
 {
     // Descriptor ID write
@@ -51,6 +77,7 @@ void serialize_header(struct HEADER * header, char bytes[23])
     memcpy(bytes + 18, pl_len_bytes, 4);
 }
 
+// Deserialize an incoming header from the input stream
 void deserialize_header(char bytes[23], struct HEADER * header)
 {
     for (int i = 0; i < 16; i++)
@@ -65,7 +92,6 @@ void deserialize_header(char bytes[23], struct HEADER * header)
     memcpy(pl_len_bytes, bytes + 18, 4);
     header->pl_length = toInteger32_be(pl_len_bytes);
 }
-
 
 // generate a random string
 static char * rand_str(char * str, size_t size)

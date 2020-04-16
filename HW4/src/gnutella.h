@@ -14,7 +14,7 @@
 struct HEADER
 {
     char ID[16];
-    char pl_descriptor;
+    unsigned char pl_descriptor;
     unsigned char TTL;
     unsigned char Hops;
     int32_t pl_length;
@@ -24,6 +24,7 @@ struct HEADER
 void serialize_header(struct HEADER * header, char bytes[23]);
 void deserialize_header(char bytes[23], struct HEADER * header);
 void init_header(char ID[16], char pl_descriptor, int TTL, int pl_length, struct HEADER * header);
+void process_header(struct HEADER * header);
 void send_header(char header[23]);
 void send_payload(char * pl, int pl_length);
 static char * rand_str(char *dest, size_t length);
