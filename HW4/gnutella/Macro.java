@@ -15,6 +15,7 @@ public class Macro
     public static int PUSH = 0x40;
     public static int QUERY = 0x80;
     public static int QUERYHIT = 0x81;
+    public static int DEFAULTPORT = 57176;
 
     public static int toInteger(byte[] bytes)
     {
