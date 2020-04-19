@@ -13,10 +13,10 @@ public class Connector extends Thread
     private String address;
     private String ID;
     private int port;
-    private ArrayList<GnutellaNode> Neighbors;
+    private ArrayList<Pair<Neighbor, Thread>> Neighbors;
 
 
-    public Connector(String address, int port, String ID, ArrayList<GnutellaNode> Neighbors)
+    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Thread>> Neighbors)
     {
         // Store the variables
         this.address = address;

@@ -8,7 +8,7 @@ public class GnutellaNode
     public String IP;
     public int ListenPort;
     public int ConnectPort;
-    public ArrayList<GnutellaNode> Neighbors = new ArrayList<GnutellaNode>();
+    public ArrayList<Pair<Neighbor, Thread>> Neighbors = new ArrayList<Pair<Neighbor, Thread>>();
 
     // Network variables
     Thread connector = null;
