@@ -11,8 +11,8 @@ public class GnutellaNode
     public ArrayList<GnutellaNode> Neighbors = new ArrayList<GnutellaNode>();
 
     // Network variables
-    Connector connector = null;
-    Listener listener   = null;
+    Thread connector = null;
+    Thread listener   = null;
 
     public GnutellaNode()
     {
@@ -42,11 +42,10 @@ public class GnutellaNode
     {
         // If we haven't made any connections, there is no pre-existing network
         connector = new Connector(address, ConnectPort, ID, Neighbors);
-        connector.run();
+        connector.start();
 
-        System.out.println("Connector running.....");
         Listener listener = new Listener(ListenPort, ID, Neighbors);
-        listener.run();
+        listener.start();
     }
 
     public void Start() throws Exception

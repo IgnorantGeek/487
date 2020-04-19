@@ -29,7 +29,7 @@ public class Connector extends Thread
     {
         try
         {
-            System.out.println("Establishing Connection on Port " + address + ":" + port);
+            System.out.println("Establishing Connection at - " + address + ":" + port);
             server = new Socket(address, port);
             in = new DataInputStream(server.getInputStream());
             out = new DataOutputStream(server.getOutputStream());
