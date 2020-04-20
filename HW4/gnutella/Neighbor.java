@@ -9,7 +9,6 @@ public class Neighbor
     public int Port;
     public ArrayList<Neighbor> Neighbors = new ArrayList<Neighbor>();
     public int NumFiles;
-    public int SharedSize;
     public int friendCount;
     public long lastContact;
     public int connectFlag;
@@ -35,7 +34,7 @@ public class Neighbor
         buf = new byte[2];
         buf[0] = payload[16];
         buf[1] = payload[17];
-        neighbor.Port = Macro.toInteger(buf);
+        neighbor.Port = ((buf[0] & 0xff) << 8) | (buf[1] & 0xff);
 
         int ip1 = payload[18] & 0xff;
         int ip2 = payload[19] & 0xff;
@@ -49,19 +48,13 @@ public class Neighbor
             buf[i] = payload[22+i];
         }
         neighbor.NumFiles = Macro.toInteger(buf);
-        
-        for (int i = 0; i < buf.length; i++)
-        {
-            buf[i] = payload[26+i];
-        }
-        neighbor.SharedSize = Macro.toInteger(buf);
 
         buf = new byte[1];
 
-        buf[0] = payload[30];
-        neighbor.friendCount = Macro.toInteger(buf);
+        buf[0] = payload[26];
+        neighbor.friendCount = (buf[0] & 0xff);
 
-        int connectFlag = payload[31] & 0xff;
+        int connectFlag = payload[27] & 0xff;
         neighbor.connectFlag = connectFlag;
 
         // need to get the ips of the neighbors
@@ -71,18 +64,19 @@ public class Neighbor
             byte[] port_buf = new byte[2];
 
             // Port read section
-            port_buf[0] = payload[32+7*i];
-            port_buf[1] = payload[33+7*i];
+            port_buf[0] = payload[28+7*i];
+            port_buf[1] = payload[29+7*i];
             friend.Port = Macro.toInteger(port_buf);
 
             // ip read section
-            int friend_ip1 = payload[34+7*i] & 0xff;
-            int friend_ip2 = payload[35+7*i] & 0xff;
-            int friend_ip3 = payload[36+7*i] & 0xff;
-            int friend_ip4 = payload[37+7*i] & 0xff;
-            neighbor.IP = friend_ip1 + "." + friend_ip2 + "." + friend_ip3 + "." + friend_ip4;
+            int friend_ip1 = payload[30+7*i] & 0xff;
+            int friend_ip2 = payload[31+7*i] & 0xff;
+            int friend_ip3 = payload[32+7*i] & 0xff;
+            int friend_ip4 = payload[33+7*i] & 0xff;
+            friend.IP = friend_ip1 + "." + friend_ip2 + "." + friend_ip3 + "." + friend_ip4;
 
-            neighbor.friendCount = payload[38+7*i] & 0xff;
+            friend.friendCount = payload[34+7*i] & 0xff;
+            neighbor.Neighbors.add(friend);
         }
 
         return neighbor;
@@ -91,6 +85,8 @@ public class Neighbor
     public static Neighbor decodeQuery(byte[] data)
     {
         Neighbor neighbor = new Neighbor();
+
+
 
         return neighbor;
     }

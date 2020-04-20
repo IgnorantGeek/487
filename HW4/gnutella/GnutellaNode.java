@@ -6,8 +6,8 @@ public class GnutellaNode
 {
     public String ID;
     public String IP;
-    public int ListenPort;
-    public int ConnectPort;
+    public short ListenPort;
+    public short ConnectPort;
     public ArrayList<Pair<Neighbor, Thread>> Neighbors = new ArrayList<Pair<Neighbor, Thread>>();
 
     // Network variables
@@ -21,15 +21,14 @@ public class GnutellaNode
         ListenPort = Macro.DEFAULTPORT;
     }
 
-    public GnutellaNode(int Port)
+    public GnutellaNode(short Port)
     {
         ID = Macro.generateString(16);
         IP = Macro.getCurrentIp().getHostAddress();
-        this.ConnectPort = Port;
-        ListenPort = Macro.DEFAULTPORT;
+        this.ListenPort = Port;
     }
 
-    public GnutellaNode(int listen, int connect)
+    public GnutellaNode(short listen, short connect)
     {
 
         ID = Macro.generateString(16);
@@ -40,17 +39,20 @@ public class GnutellaNode
 
     public void Connect(String address) throws Exception
     {
+        System.out.println("Joing network with ID: " + ID);
+        System.out.println("Pinging " + IP + ":" + ConnectPort + " for network config....");
         // If we haven't made any connections, there is no pre-existing network
-        connector = new Connector(address, ConnectPort, ID, Neighbors);
+        connector = new Connector(address, ConnectPort, ID, Neighbors, Macro.OUTGOING);
         connector.start();
 
-        Listener listener = new Listener(ListenPort, ID, Neighbors);
+        Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
         listener.start();
     }
 
     public void Start() throws Exception
     {
-        Listener listener = new Listener(ListenPort, ID, Neighbors);
+        System.out.println("Creating network with root ID: " + ID);
+        Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
         listener.run();
     }
 }

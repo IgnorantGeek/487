@@ -23,7 +23,7 @@ public class Header
     {
         byte[] serial = new byte[23];
         byte[] ID_byte = ID.getBytes();
-        byte[] pl_length_byte = Macro.toBytes(pl_length);
+        byte[] pl_length_byte = Macro.to4Bytes(pl_length);
 
         for (int i = 0; i < ID_byte.length; i++)
         {

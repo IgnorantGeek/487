@@ -15,16 +15,19 @@ public class Macro
     public static int PUSH = 0x40;
     public static int QUERY = 0x80;
     public static int QUERYHIT = 0x81;
-    public static int DEFAULTPORT = 57176;
+    public static int INCOMING = 0x16;
+    public static int OUTGOING = 0x17;
+    public static short DEFAULTPORT = (short) 2076;
+
 
     public static int toInteger(byte[] bytes)
     {
         return ByteBuffer.wrap(bytes).getInt();
     }
 
-    public static byte[] toBytes(int n)
+    public static byte[] to4Bytes(int x)
     {
-        return ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(n).array();
+        return ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(x).array();
     }
 
     public static String generateString(int n) 
@@ -65,5 +68,33 @@ public class Macro
         } catch (SocketException e) {
         }
         return null;
+    }
+
+    public static byte[] IpTo4Bytes(String address)
+    {
+        byte[] ret = new byte[4];
+
+        String hold = new String();
+        String[] nums = new String[4];
+        int count = 0;
+        for (int i = 0; i < address.length(); i++)
+        {
+            if (address.charAt(i) == '.') 
+            {
+                nums[count] = hold;
+                count++;
+                hold = "";
+            }
+            else hold += address.charAt(i);
+        }
+        nums[3] = hold;
+
+        for (int i = 0; i < 4; i ++)
+        {
+            Integer a = Integer.parseInt(nums[i]);
+            ret[i] = a.byteValue();
+        }
+
+        return ret;
     }
 }
