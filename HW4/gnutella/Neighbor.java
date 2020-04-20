@@ -8,7 +8,10 @@ public class Neighbor
     public String IP;
     public int Port;
     public ArrayList<Neighbor> Neighbors = new ArrayList<Neighbor>();
-    public long lastContact; 
+    public int NumFiles;
+    public int SharedSize;
+    public int friendCount;
+    public long lastContact;
 
     public Neighbor() { }
 
