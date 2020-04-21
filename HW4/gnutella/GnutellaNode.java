@@ -28,11 +28,18 @@ public class GnutellaNode
         this.ListenPort = Port;
     }
 
-    public GnutellaNode(int listen, int connect)
+    public GnutellaNode(String address)
+    {
+        ID = Macro.generateString(16);
+        IP = address;
+        this.ListenPort = Macro.DEFAULTPORT;
+    }
+
+    public GnutellaNode(String address, int listen, int connect)
     {
 
         ID = Macro.generateString(16);
-        IP = Macro.getCurrentIp().getHostAddress();
+        IP = address;
         this.ListenPort = listen;
         this.ConnectPort = connect;
     }
@@ -56,8 +63,6 @@ public class GnutellaNode
                 {
                     // We have a connection. Need to read the header.
                     System.out.println("DATA AVAILABLE");
-                    c.setFunction(Macro.WAITING);
-                    c.start();
                 } 
             }
         }
@@ -91,9 +96,16 @@ public class GnutellaNode
                 if (pair.getLeft().IP == null)
                 {
                     System.out.println("PINGING");
-                    pair.getRight().setFunction(Macro.PING);
-                    pair.getRight().start();
-                    Thread.sleep(10000);
+                    if (!pair.getRight().isAlive())
+                    {
+                        Connector cn = new Connector(pair.getRight());
+                        cn.setFunction(Macro.PING);
+                        pair.setRight(cn);
+                        System.out.println("Function set for connector");
+                        cn.start();
+                        System.out.println("Thread running.");
+                        Thread.sleep(10000);
+                    }
                 }    
             }
         }

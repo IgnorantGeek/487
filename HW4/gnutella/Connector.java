@@ -17,6 +17,7 @@ public class Connector extends Thread
     private int Port;
     private int numFiles;
     private ArrayList<Pair<Neighbor, Connector>> Neighbors;
+    public Neighbor neighbor;
     private int neighborCount = 0;
     private int function = -1;
 
@@ -38,6 +39,21 @@ public class Connector extends Thread
         this.Port = port;
         this.Neighbors = Neighbors;
         function = initialFunction;
+    }
+
+    public Connector(Connector connector)
+    {
+        socket = connector.socket;
+        in = connector.in;
+        out = connector.out;
+        address = connector.address;
+        ID = connector.address;
+        Port = connector.Port;
+        numFiles = connector.numFiles;
+        Neighbors = connector.Neighbors;
+        neighborCount = connector.neighborCount;
+        neighbor = connector.neighbor;
+        function = connector.function;
     }
 
     public void setFunction(int function)
@@ -105,6 +121,8 @@ public class Connector extends Thread
                         Pair<Neighbor, Connector> pair = new Pair<Neighbor,Connector>(neighbor, this);
                         Neighbors.add(pair);
 
+                        this.neighbor = neighbor;
+
                         // decide whether to contact new agents
                     }
                     neighborCount = Neighbors.size();
@@ -153,17 +171,36 @@ public class Connector extends Thread
 
                 if (ping.pl_descriptor == Macro.PING)
                 {
-
-
                     System.out.println("PING RECIEVED - " + ping.ID);
 
                     SendPong(ping);
                 }
             }
-            
-            if (function == Macro.WAITING)
+            else if (function == Macro.WAITING)
             {
                 // read the header and perform function
+                Header header = readHeader();
+
+                if (header.pl_descriptor == Macro.PING)
+                {
+                    // pong back
+                    SendPong(header);
+                }
+            }
+            else if (function == Macro.PING)
+            {
+                System.out.println("Handling ping....");
+                Header ping = SendPing();
+
+                Header pong = readHeader();
+
+                Neighbor n = Neighbor.decodePong(readPong(pong));
+
+                // check for the neighbor
+                if (neighbor.ID == n.ID)
+                {
+                    // It is a pong from the neighbor
+                }
             }
         } 
         catch (SocketException e)
@@ -197,6 +234,43 @@ public class Connector extends Thread
         }
     }
 
+    public Header readHeader()
+    {
+        try
+        {
+            Header h = new Header();
+            byte[] data = new byte[23];
+
+            in.readFully(data);
+
+            h = Header.deserialize(data);
+
+            return h;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public byte[] readPong(Header pongHeader)
+    {
+        try
+        {
+            byte[] payload = new byte[pongHeader.pl_length];
+
+            in.readFully(payload);
+
+            return payload;
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void SendPong(Header header)
     {
         try
@@ -209,15 +283,30 @@ public class Connector extends Thread
 
             byte[] pong_byte = this.EncodePongBytes();
 
-            if (this.neighborCount < 7)
+            // If this neighbor is already in the list, don't add a new neighbor
+            boolean new_neighbor = true;
+            for (Pair<Neighbor, Connector> pair : Neighbors)
+            {
+                Neighbor n = pair.getLeft();
+                if (n.ID == header.ID)
+                {
+                    // This is not a new neighbor we are ponging, update system time
+                    new_neighbor = false;
+                    n.lastContact = System.currentTimeMillis();
+                    break;
+                }
+            }
+            if (new_neighbor && this.neighborCount < 7)
             {
                 // add this thread and a neighbor
                 Neighbor neighbor = new Neighbor();
                 neighbor.ID = header.ID;
+                neighbor.lastContact = System.currentTimeMillis();
                 Pair<Neighbor, Connector> pair = new Pair<Neighbor,Connector>(neighbor, this);
+                this.neighbor = neighbor;
                 Neighbors.add(pair);
             }
-            
+
             out.write(pong_byte, 0, pong_byte.length);
             out.flush();
 
