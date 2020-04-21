@@ -11,9 +11,9 @@ public class Listener extends Thread
     public String ID;
     public String address;
     public int Port;
-    public ArrayList<Pair<Neighbor, Thread>> Neighbors;
+    public ArrayList<Pair<Neighbor, Connector>> Neighbors;
 
-    public Listener(int Port, String ID, String address, ArrayList<Pair<Neighbor, Thread>> Neighbors) throws Exception
+    public Listener(int Port, String ID, String address, ArrayList<Pair<Neighbor, Connector>> Neighbors) throws Exception
     {
         this.ID = ID;
         server = new ServerSocket(Port);
@@ -41,8 +41,6 @@ public class Listener extends Thread
                     connector.start();
                     System.out.println("Client connected.");
                 }
-
-                // Incoming connection recieved
             }
         } 
         catch (Exception e)

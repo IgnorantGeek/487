@@ -4,7 +4,8 @@ public class Test2
 {
     public static void main(String[] args) throws Exception
     {
-        short port = 2077;
+        int port = 2077;
+        if (args.length == 1) port = Integer.parseInt(args[0]);
         GnutellaNode node = new GnutellaNode(port, Macro.DEFAULTPORT);
         
         node.Connect("127.0.0.1");

@@ -16,12 +16,12 @@ public class Connector extends Thread
     private String ID;
     private int Port;
     private int numFiles;
-    private ArrayList<Pair<Neighbor, Thread>> Neighbors;
+    private ArrayList<Pair<Neighbor, Connector>> Neighbors;
     private int neighborCount = 0;
     private int function = -1;
 
 
-    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Thread>> Neighbors, int initialFunction)
+    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Connector>> Neighbors, int initialFunction)
     {
         this.address = address;
         this.Port = port;
@@ -30,7 +30,7 @@ public class Connector extends Thread
         function = initialFunction;
     }
 
-    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Thread>> Neighbors, Socket socket, int initialFunction)
+    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Connector>> Neighbors, Socket socket, int initialFunction)
     {
         this.address = address;
         this.ID = ID;
@@ -40,6 +40,11 @@ public class Connector extends Thread
         function = initialFunction;
     }
 
+    public void setFunction(int function)
+    {
+        this.function = function;
+    }
+
     public void run()
     {
         try
@@ -47,7 +52,7 @@ public class Connector extends Thread
             // If function is intial Outgoing
             if (function == Macro.OUTGOING)
             {
-                System.out.println("Establishing Connection at - " + address + ":" + Port);
+                System.out.println("Handling outgoing connection...");
                 socket = new Socket(address, Port);
                 in = new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());
@@ -72,11 +77,8 @@ public class Connector extends Thread
                 {    
                     // successful connection made
                     System.out.println("Connection established. PINGING.");
-                    Header ping = new Header(ID, Macro.PING, 1, 0, 0);
-                    byte[] serial_ping = ping.serialize();
-
-                    out.write(serial_ping, 0, serial_ping.length);
-                    out.flush();
+                    
+                    SendPing();
 
                     byte[] pong_byte = new byte[23];
 
@@ -100,11 +102,14 @@ public class Connector extends Thread
                         Neighbor neighbor = Neighbor.decodePong(payload);
 
                         // Insert neighbor into array
-                        Pair<Neighbor, Thread> pair = new Pair<Neighbor,Thread>(neighbor, this);
+                        Pair<Neighbor, Connector> pair = new Pair<Neighbor,Connector>(neighbor, this);
                         Neighbors.add(pair);
 
                         // decide whether to contact new agents
                     }
+                    neighborCount = Neighbors.size();
+                    System.out.println("Neighbor count: " + neighborCount); 
+                    System.out.println("PONG PROCESSED. WAITING");
                 }
             }
             else if (function == Macro.INCOMING)
@@ -152,25 +157,73 @@ public class Connector extends Thread
 
                     System.out.println("PING RECIEVED - " + ping.ID);
 
-                    Header pong = new Header(ID, Macro.PONG, 1, 0, 28 + 8 * neighborCount);
-
-                    byte[] header_byte = pong.serialize();
-
-                    out.write(header_byte, 0, header_byte.length);
-
-                    byte[] pong_byte = this.EncodePongBytes();
-                    
-                    out.write(pong_byte, 0, pong_byte.length);
-                    out.flush();
-
-                    System.out.println("Pong sent. Byte  length : " + pong_byte.length);
+                    SendPong(ping);
                 }
-                // else, check the list of friends from the neighbor
+            }
+            
+            if (function == Macro.WAITING)
+            {
+                // read the header and perform function
             }
         } 
         catch (SocketException e)
         {
             // don't do anything
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public Header SendPing()
+    {
+        try
+        {
+            // send a ping to this particular connection
+            Header ping = new Header(ID, Macro.PING, 1, 0, 0);
+
+            byte[] ping_byte = ping.serialize();
+
+            out.write(ping_byte, 0, ping_byte.length);
+            out.flush();
+
+            return ping;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void SendPong(Header header)
+    {
+        try
+        {
+            Header pong = new Header(ID, Macro.PONG, 1, 0, 28 + 8 * neighborCount);
+
+            byte[] header_byte = pong.serialize();
+
+            out.write(header_byte, 0, header_byte.length);
+
+            byte[] pong_byte = this.EncodePongBytes();
+
+            if (this.neighborCount < 7)
+            {
+                // add this thread and a neighbor
+                Neighbor neighbor = new Neighbor();
+                neighbor.ID = header.ID;
+                Pair<Neighbor, Connector> pair = new Pair<Neighbor,Connector>(neighbor, this);
+                Neighbors.add(pair);
+            }
+            
+            out.write(pong_byte, 0, pong_byte.length);
+            out.flush();
+
+            System.out.println("Pong sent. Byte  length : " + pong_byte.length);
+            neighborCount = Neighbors.size();
+            System.out.println("Neighbor count: " + neighborCount);
         }
         catch (IOException e)
         {
