@@ -11,9 +11,9 @@ public class Listener extends Thread
     public String ID;
     public String address;
     public int Port;
-    public ArrayList<Pair<Neighbor, Connector>> Neighbors;
+    public ArrayList<Connector> Neighbors;
 
-    public Listener(int Port, String ID, String address, ArrayList<Pair<Neighbor, Connector>> Neighbors) throws Exception
+    public Listener(int Port, String ID, String address, ArrayList<Connector> Neighbors) throws Exception
     {
         this.ID = ID;
         server = new ServerSocket(Port);

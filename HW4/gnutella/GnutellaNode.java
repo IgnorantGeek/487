@@ -8,7 +8,7 @@ public class GnutellaNode
     public String IP;
     public int ListenPort;
     public int ConnectPort;
-    public ArrayList<Pair<Neighbor, Connector>> Neighbors = new ArrayList<Pair<Neighbor, Connector>>();
+    public ArrayList<Connector> Neighbors = new ArrayList<Connector>();
 
     // Network variables
     Connector connector = null;
@@ -56,9 +56,8 @@ public class GnutellaNode
 
         while (true)
         {
-            for (Pair<Neighbor,Connector> pair : Neighbors)
+            for (Connector c : Neighbors)
             {
-                Connector c = pair.getRight();
                 if (c.in.available() != 0)
                 {
                     // We have a connection. Need to read the header.
@@ -81,9 +80,8 @@ public class GnutellaNode
         System.out.println("Checking the pairs");
         while (true)
         {
-            for (Pair<Neighbor,Connector> pair : Neighbors)
+            for (Connector c : Neighbors)
             {
-                Connector c = pair.getRight();
                 if (c.in.available() != 0)
                 {
                     // We have a connection. Need to read the header.
@@ -91,17 +89,18 @@ public class GnutellaNode
                 } 
             }
 
-            for (Pair<Neighbor,Connector> pair : Neighbors)
+            for (int i = 0; i < Neighbors.size(); i++)
             {
-                if (pair.getLeft().IP == null)
+                Connector c = Neighbors.get(i);
+                if (c.neighbor.ID == null)
                 {
                     System.out.println("PINGING");
-                    if (!pair.getRight().isAlive())
+                    if (!c.isAlive())
                     {
-                        Connector cn = new Connector(pair.getRight());
+                        Connector cn = new Connector(c);
                         cn.setFunction(Macro.PING);
-                        pair.setRight(cn);
                         System.out.println("Function set for connector");
+                        Neighbors.set(i, cn);
                         cn.start();
                         System.out.println("Thread running.");
                         Thread.sleep(10000);

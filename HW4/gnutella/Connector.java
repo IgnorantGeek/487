@@ -16,13 +16,13 @@ public class Connector extends Thread
     private String ID;
     private int Port;
     private int numFiles;
-    private ArrayList<Pair<Neighbor, Connector>> Neighbors;
+    private ArrayList<Connector> Neighbors;
     public Neighbor neighbor;
     private int neighborCount = 0;
     private int function = -1;
 
 
-    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Connector>> Neighbors, int initialFunction)
+    public Connector(String address, int port, String ID, ArrayList<Connector> Neighbors, int initialFunction)
     {
         this.address = address;
         this.Port = port;
@@ -31,7 +31,7 @@ public class Connector extends Thread
         function = initialFunction;
     }
 
-    public Connector(String address, int port, String ID, ArrayList<Pair<Neighbor, Connector>> Neighbors, Socket socket, int initialFunction)
+    public Connector(String address, int port, String ID, ArrayList<Connector> Neighbors, Socket socket, int initialFunction)
     {
         this.address = address;
         this.ID = ID;
@@ -117,11 +117,10 @@ public class Connector extends Thread
 
                         Neighbor neighbor = Neighbor.decodePong(payload);
 
-                        // Insert neighbor into array
-                        Pair<Neighbor, Connector> pair = new Pair<Neighbor,Connector>(neighbor, this);
-                        Neighbors.add(pair);
-
                         this.neighbor = neighbor;
+
+                        // Insert neighbor into array
+                        Neighbors.add(this);
 
                         // decide whether to contact new agents
                     }
@@ -176,28 +175,42 @@ public class Connector extends Thread
                     SendPong(ping);
                 }
             }
-            else if (function == Macro.WAITING)
+            else if (function == Macro.READ)
             {
                 // read the header and perform function
                 Header header = readHeader();
 
                 if (header.pl_descriptor == Macro.PING)
                 {
-                    // pong back
+                    // pong back and update neighbor contact time
                     SendPong(header);
+                }
+                else if (header.pl_descriptor == Macro.QUERY)
+                {
+                    // check for query, if we have already seen this query, remove and don't forward it
+                }
+                else if (header.pl_descriptor == Macro.QUERYHIT)
+                {
+                    // Back propagate the queryhit message, but check for an existing query id
+                }
+                else if (header.pl_descriptor == Macro.PONG)
+                {
+                    // probably shouldn't get a random pong, discard from network
                 }
             }
             else if (function == Macro.PING)
             {
-                System.out.println("Handling ping....");
-                Header ping = SendPing();
+                System.out.println("Sending PING....");
+                SendPing();
 
                 Header pong = readHeader();
 
-                Neighbor n = Neighbor.decodePong(readPong(pong));
+                byte[] pong_payload = readPong(pong);
+
+                Neighbor n = Neighbor.decodePong(pong_payload);
 
                 // check for the neighbor
-                if (neighbor.ID == n.ID)
+                if (this.neighbor.ID == n.ID)
                 {
                     // It is a pong from the neighbor
                 }
@@ -285,9 +298,9 @@ public class Connector extends Thread
 
             // If this neighbor is already in the list, don't add a new neighbor
             boolean new_neighbor = true;
-            for (Pair<Neighbor, Connector> pair : Neighbors)
+            for (Connector neighbor : Neighbors)
             {
-                Neighbor n = pair.getLeft();
+                Neighbor n = neighbor.neighbor;
                 if (n.ID == header.ID)
                 {
                     // This is not a new neighbor we are ponging, update system time
@@ -302,9 +315,8 @@ public class Connector extends Thread
                 Neighbor neighbor = new Neighbor();
                 neighbor.ID = header.ID;
                 neighbor.lastContact = System.currentTimeMillis();
-                Pair<Neighbor, Connector> pair = new Pair<Neighbor,Connector>(neighbor, this);
                 this.neighbor = neighbor;
-                Neighbors.add(pair);
+                Neighbors.add(this);
             }
 
             out.write(pong_byte, 0, pong_byte.length);
@@ -361,7 +373,7 @@ public class Connector extends Thread
 
         for (int i = 0; i < neighborCount; i++)
         {
-            Neighbor friend = Neighbors.get(i).getLeft();
+            Neighbor friend = Neighbors.get(i).neighbor;
             byte[] port_buf = new byte[2];
 
             port_buf[0] = (byte) (this.Port & 0xff);

@@ -17,7 +17,7 @@ public class Macro
     public static int QUERYHIT = 0x81;
     public static int INCOMING = 0x16;
     public static int OUTGOING = 0x17;
-    public static int WAITING = 0x18;
+    public static int READ = 0x18;
     public static short DEFAULTPORT = (short) 2076;
 
 
