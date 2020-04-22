@@ -47,7 +47,7 @@ public class Connector extends Thread
         in = connector.in;
         out = connector.out;
         address = connector.address;
-        ID = connector.address;
+        ID = connector.ID;
         Port = connector.Port;
         numFiles = connector.numFiles;
         Neighbors = connector.Neighbors;
@@ -210,9 +210,9 @@ public class Connector extends Thread
                 Neighbor n = Neighbor.decodePong(pong_payload);
 
                 // check for the neighbor
-                if (this.neighbor.ID == n.ID)
+                if (this.neighbor.ID.equals(n.ID))
                 {
-                    // It is a pong from the neighbor
+                    this.neighbor = n;
                 }
             }
         } 
@@ -297,11 +297,12 @@ public class Connector extends Thread
             byte[] pong_byte = this.EncodePongBytes();
 
             // If this neighbor is already in the list, don't add a new neighbor
+            System.out.println("PING recieved from node: " + header.ID);
             boolean new_neighbor = true;
-            for (Connector neighbor : Neighbors)
+            for (Connector c : Neighbors)
             {
-                Neighbor n = neighbor.neighbor;
-                if (n.ID == header.ID)
+                Neighbor n = c.neighbor;
+                if (n.ID.equals(header.ID))
                 {
                     // This is not a new neighbor we are ponging, update system time
                     new_neighbor = false;

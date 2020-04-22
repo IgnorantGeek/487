@@ -54,16 +54,23 @@ public class GnutellaNode
         connector = new Connector(address, ConnectPort, ID, Neighbors, Macro.OUTGOING);
         connector.start();
 
+
         while (true)
         {
-            for (Connector c : Neighbors)
+            for (int i = 0; i < Neighbors.size(); i++)
             {
+                Connector c = Neighbors.get(i);
                 if (c.in.available() != 0)
                 {
                     // We have a connection. Need to read the header.
                     System.out.println("DATA AVAILABLE");
+                    Connector cn = new Connector(c);
+                    cn.setFunction(Macro.READ);
+                    Neighbors.set(i, cn);
+                    cn.start();
                 } 
             }
+            Thread.sleep(5000);
         }
     }
 
@@ -92,7 +99,7 @@ public class GnutellaNode
             for (int i = 0; i < Neighbors.size(); i++)
             {
                 Connector c = Neighbors.get(i);
-                if (c.neighbor.ID == null)
+                if (c.neighbor.IP == null)
                 {
                     System.out.println("PINGING");
                     if (!c.isAlive())
@@ -103,7 +110,7 @@ public class GnutellaNode
                         Neighbors.set(i, cn);
                         cn.start();
                         System.out.println("Thread running.");
-                        Thread.sleep(10000);
+                        Thread.sleep(15000);
                     }
                 }    
             }

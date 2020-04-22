@@ -66,7 +66,7 @@ public class Neighbor
             // Port read section
             port_buf[0] = payload[28+7*i];
             port_buf[1] = payload[29+7*i];
-            friend.Port = Macro.toInteger(port_buf);
+            friend.Port = ((port_buf[0] & 0xff) << 8) | (port_buf[1] & 0xff);
 
             // ip read section
             int friend_ip1 = payload[30+7*i] & 0xff;
