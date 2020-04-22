@@ -65,7 +65,7 @@ public class Connector extends Thread
     {
         try
         {
-            // If function is intial Outgoing
+            // Initial connection, made by outgoing call
             if (function == Macro.OUTGOING)
             {
                 System.out.println("Handling outgoing connection...");
@@ -128,6 +128,7 @@ public class Connector extends Thread
                     System.out.println("PONG PROCESSED. WAITING");
                 }
             }
+            // Initial connection. made by incoming connection
             else if (function == Macro.INCOMING)
             {
                 System.out.println("Handling incoming connection....");
@@ -174,9 +175,9 @@ public class Connector extends Thread
                     SendPong(ping);
                 }
             }
+            // The connector has a waiting message, read the message
             else if (function == Macro.READ)
             {
-                // read the header and perform function
                 Header header = readHeader();
 
                 if (header.pl_descriptor == Macro.PING)
@@ -197,6 +198,7 @@ public class Connector extends Thread
                     // probably shouldn't get a random pong, discard from network
                 }
             }
+            // The connector needs to ping its neighbor
             else if (function == Macro.PING)
             {
                 System.out.println("Sending PING....");

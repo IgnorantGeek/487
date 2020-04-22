@@ -30,8 +30,6 @@ public class Listener extends Thread
             // Listen for connections
             while (true)
             {
-                System.out.println("Listening for incoming connections....");
-
                 client = server.accept();
                 
                 Connector connector = new Connector(address, Port, ID, Neighbors, client, Macro.INCOMING); 

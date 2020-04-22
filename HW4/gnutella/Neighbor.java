@@ -78,7 +78,8 @@ public class Neighbor
             friend.friendCount = payload[34+7*i] & 0xff;
             neighbor.Neighbors.add(friend);
         }
-
+        
+        neighbor.lastContact = System.currentTimeMillis();
         return neighbor;
     }
 
