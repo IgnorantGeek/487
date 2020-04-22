@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class GnutellaNode
 {
+    // Local Variables
     public String ID;
     public String IP;
     public int ListenPort;
@@ -14,6 +15,7 @@ public class GnutellaNode
     Connector connector = null;
     Listener listener   = null;
 
+    /*---------------Constructors---------------*/
     public GnutellaNode()
     {
         ID = Macro.generateString(16);
@@ -44,76 +46,103 @@ public class GnutellaNode
         this.ConnectPort = connect;
     }
 
-    public void Connect(String address) throws Exception
+    /**
+     * Connect to a pre-existing gnutella network
+     * @param address the IP of the node to try to connect to
+     */
+    public void Connect(String address)
     {
-        System.out.println("Joing network with ID: " + ID);
-        System.out.println("Pinging " + IP + ":" + ConnectPort + " for network config....");
-        Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
-        listener.start();
-        // try to join pre-existing network
-        connector = new Connector(address, ConnectPort, ID, Neighbors, Macro.OUTGOING);
-        connector.start();
-
-
-        while (true)
+        try
         {
-            for (int i = 0; i < Neighbors.size(); i++)
+            System.out.println("Joing network with ID: " + ID);
+            System.out.println("Pinging " + IP + ":" + ConnectPort + " for network config....");
+            Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
+            listener.start();
+            // try to join pre-existing network
+            connector = new Connector(address, ConnectPort, ID, Neighbors, Macro.OUTGOING);
+            connector.start();
+
+
+            while (true)
             {
-                Connector c = Neighbors.get(i);
-                if (c.in.available() != 0)
+                for (int i = 0; i < Neighbors.size(); i++)
                 {
-                    // We have a connection. Need to read the header.
-                    System.out.println("DATA AVAILABLE");
-                    Connector cn = new Connector(c);
-                    cn.setFunction(Macro.READ);
-                    Neighbors.set(i, cn);
-                    cn.start();
-                } 
+                    Connector c = Neighbors.get(i);
+                    if (c.in.available() != 0)
+                    {
+                        // We have a connection. Need to read the header.
+                        Connector cn = new Connector(c);
+                        cn.setFunction(Macro.READ);
+                        Neighbors.set(i, cn);
+                        cn.start();
+                    } 
+                }
+
+                // Wait 5 seconds and run again
+                Thread.sleep(5000);
             }
-            Thread.sleep(5000);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
-    public void Start() throws Exception
+    /**
+     * Create a new gnutella network with this as the root node
+     */
+    public void Start()
     {
-        System.out.println("Creating network with root ID: " + ID);
-        Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
-        listener.start();
-
-        // Wait 20 seconds and check for updates to the neighbors list
-        // Check for last contact greater than some number, and valid ip/port
-        Thread.sleep(20000);
-        
-        System.out.println("Checking the pairs");
-        while (true)
+        try
         {
-            for (Connector c : Neighbors)
-            {
-                if (c.in.available() != 0)
-                {
-                    // We have a connection. Need to read the header.
-                    System.out.println("DATA AVAILABLE");
-                } 
-            }
+            System.out.println("Creating network with root ID: " + ID);
+            Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
+            listener.start();
 
-            for (int i = 0; i < Neighbors.size(); i++)
+            // Iterate over the current neighbor and handle any send/recieve calls
+            while (true)
             {
-                Connector c = Neighbors.get(i);
-                if (c.neighbor.IP == null)
+                // Check all verified neighbors for an incoming connection
+                for (int i = 0; i < Neighbors.size(); i++)
                 {
-                    System.out.println("PINGING");
-                    if (!c.isAlive())
+                    Connector c = Neighbors.get(i);
+                    if (c.in.available() != 0)
                     {
+                        // We have a connection. Need to read the header.
                         Connector cn = new Connector(c);
-                        cn.setFunction(Macro.PING);
-                        System.out.println("Function set for connector");
+                        cn.setFunction(Macro.READ);
                         Neighbors.set(i, cn);
                         cn.start();
-                        System.out.println("Thread running.");
-                        Thread.sleep(15000);
                     }
-                }    
+                }
+
+                // Check all verified neighbors for un-initialized nodes
+                for (int i = 0; i < Neighbors.size(); i++)
+                {
+                    Connector c = Neighbors.get(i);
+                    
+                    // If a node doesn't have a valid IP, send a PING
+                    if (c.neighbor.IP == null)
+                    {
+                        System.out.println("PINGING");
+                        if (!c.isAlive())
+                        {
+                            Connector cn = new Connector(c);
+                            cn.setFunction(Macro.PING);
+                            Neighbors.set(i, cn);
+                            cn.start();
+                            Thread.sleep(10000);
+                        }
+                    }    
+                }
+
+                // Wait 5 seconds and run again
+                Thread.sleep(5000);
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

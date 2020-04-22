@@ -109,7 +109,6 @@ public class Connector extends Thread
                     if (pong.pl_descriptor == Macro.PONG)
                     {
                         System.out.println("PONG RECIEVED.");
-                        System.out.println(pong.pl_length);
                         // read the pong payload
                         byte[] payload = new byte[pong.pl_length];
                         
@@ -297,7 +296,6 @@ public class Connector extends Thread
             byte[] pong_byte = this.EncodePongBytes();
 
             // If this neighbor is already in the list, don't add a new neighbor
-            System.out.println("PING recieved from node: " + header.ID);
             boolean new_neighbor = true;
             for (Connector c : Neighbors)
             {
