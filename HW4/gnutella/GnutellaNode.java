@@ -39,6 +39,7 @@ public class GnutellaNode
     public GnutellaNode(int listen, int connect)
     {
         ID = Macro.generateString(16);
+        IP = Macro.getCurrentIp().getHostAddress();
         this.ListenPort = listen;
         this.ConnectPort = connect;
         Random random = new Random();
@@ -111,13 +112,10 @@ public class GnutellaNode
         }
     }
 
-    // TODO: fix me
     public void CheckNeighborLoop() throws Exception
     {
         while (true)
         {
-            // Wait interval seconds and run again
-            Thread.sleep(interval * 1000);
 
             // Check all verified neighbors for an incoming connection
             for (int i = 0; i < Neighbors.size(); i++)
@@ -165,10 +163,28 @@ public class GnutellaNode
                     Connector c = Neighbors.get(i);
                     for (Neighbor n : c.neighbor.Neighbors)
                     {
-                        // if this neighbor isn't already connected, try to contact
+                        if (n.ID != null && !n.ID.equals(ID))
+                        {
+                            boolean contact = true;
+                            for (int j = 0; j < Neighbors.size(); j++)
+                            {
+                                if (n.ID.equals(Neighbors.get(i).neighbor.ID)) contact = false;
+                            }
+                            if (contact)
+                            {
+                                Connector con = new Connector(n.IP, n.Port, ID, Neighbors, Macro.OUTGOING);
+                                con.start();
+                                System.out.println("Contacting new servant");
+                                break outerloop;
+                            }
+                        }
                     }
                 }
             }
+
+
+            // Wait interval seconds and run again
+            Thread.sleep(interval * 1000);
         }
     }
 }

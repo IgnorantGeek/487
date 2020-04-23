@@ -377,6 +377,7 @@ public class Connector extends Thread
 
             payload[34+7*i] = (byte) friend.friendCount;
             
+            System.out.println("Friend address - " + friend.IP + ":"+ friend.Port);
         }
         
         return payload;
