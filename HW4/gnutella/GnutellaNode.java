@@ -74,7 +74,7 @@ public class GnutellaNode
         {
             System.out.println("Interval: "  + interval);
             System.out.println("Joing network with ID: " + ID);
-            System.out.println("Pinging " + IP + ":" + ConnectPort + " for network config....");
+            System.out.println("Pinging " + address + ":" + ConnectPort + " for network config....");
             Listener listener = new Listener(ListenPort, ID, IP, Neighbors);
             listener.start();
             // try to join pre-existing network
@@ -116,6 +116,9 @@ public class GnutellaNode
     {
         while (true)
         {
+            // Wait interval seconds and run again
+            Thread.sleep(interval * 1000);
+
             // Check all verified neighbors for an incoming connection
             for (int i = 0; i < Neighbors.size(); i++)
             {
@@ -139,7 +142,8 @@ public class GnutellaNode
                 // If a node doesn't have a valid IP, send a PING
                 // Also if a node hasn't been heard from in 1 minute
                 if (c.neighbor.IP == null
-                ||  System.currentTimeMillis() - c.neighbor.lastContact > 60000)
+                ||  System.currentTimeMillis() - c.neighbor.lastContact > 60000
+                ||  c.neighbor.lastContact == -1)
                 {
                     if (!c.isAlive())
                     {
@@ -147,29 +151,24 @@ public class GnutellaNode
                         cn.setFunction(Macro.PING);
                         Neighbors.set(i, cn);
                         cn.start();
-                        Thread.sleep(10000);
+                        Thread.sleep(5000);
                     }
                 }   
             }
 
             // Check all neighbors and ping friends if requirements are met
-            // if (Neighbors.size() < 6)
-            // {
-            //     outerloop:
-            //     for (int i = 0; i < Neighbors.size(); i++)
-            //     {
-            //         Connector c = Neighbors.get(i);
-            //         for (Neighbor n : c.neighbor.Neighbors)
-            //         {
-            //             // if this neighbor isn't already connected, try to contact
-            //             System.out.println(n.Port);
-            //             System.out.println(n.IP);
-            //         }
-            //     }
-            // }
-
-            // Wait interval seconds and run again
-            Thread.sleep(interval * 1000);
+            if (Neighbors.size() < 6)
+            {
+                outerloop:
+                for (int i = 0; i < Neighbors.size(); i++)
+                {
+                    Connector c = Neighbors.get(i);
+                    for (Neighbor n : c.neighbor.Neighbors)
+                    {
+                        // if this neighbor isn't already connected, try to contact
+                    }
+                }
+            }
         }
     }
 }

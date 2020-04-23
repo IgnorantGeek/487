@@ -18,7 +18,6 @@ public class Connector extends Thread
     private int numFiles;
     private ArrayList<Connector> Neighbors;
     public Neighbor neighbor;
-    private int neighborCount = 0;
     private int function = -1;
 
 
@@ -51,7 +50,6 @@ public class Connector extends Thread
         Port = connector.Port;
         numFiles = connector.numFiles;
         Neighbors = connector.Neighbors;
-        neighborCount = connector.neighborCount;
         neighbor = connector.neighbor;
         function = connector.function;
     }
@@ -204,7 +202,6 @@ public class Connector extends Thread
                     this.neighbor = n;
                 }
             }
-            neighborCount = Neighbors.size();
         } 
         catch (SocketException e)
         {
@@ -278,18 +275,7 @@ public class Connector extends Thread
     {
         try
         {
-            System.out.println("Sending PONG...");
-
-            if (this.neighbor != null)
-            {
-                if (this.neighbor.ID != null && this.neighbor.IP != null)
-                {
-                    System.out.println(this.neighbor.ID);
-                    System.out.println(this.neighbor.IP);
-                    System.out.println(this.neighbor.Port);
-                }
-            }
-            Header pong = new Header(ID, Macro.PONG, 1, 0, 28 + 8 * neighborCount);
+            Header pong = new Header(ID, Macro.PONG, 1, 0, 28 + 8 * Neighbors.size());
 
             byte[] header_byte = pong.serialize();
 
@@ -306,16 +292,14 @@ public class Connector extends Thread
                 {
                     // This is not a new neighbor we are ponging, update system time
                     new_neighbor = false;
-                    n.lastContact = System.currentTimeMillis();
                     break;
                 }
             }
-            if (new_neighbor && this.neighborCount < 7)
+            if (new_neighbor && Neighbors.size() < 7)
             {
                 // add this thread and a neighbor
                 Neighbor neighbor = new Neighbor();
                 neighbor.ID = header.ID;
-                neighbor.lastContact = System.currentTimeMillis();
                 this.neighbor = neighbor;
                 Neighbors.add(this);
             }
@@ -324,6 +308,7 @@ public class Connector extends Thread
             out.flush();
 
             System.out.println("Pong sent. Byte  length : " + pong_byte.length);
+            System.out.println("Neighbor count " + Neighbors.size());
         }
         catch (IOException e)
         {
@@ -333,7 +318,7 @@ public class Connector extends Thread
 
     public byte[] EncodePongBytes()
     {
-        byte[] payload = new byte[28 + 8 * neighborCount];
+        byte[] payload = new byte[28 + 8 * Neighbors.size()];
 
         byte[] buf = ID.getBytes();
 
@@ -343,8 +328,8 @@ public class Connector extends Thread
         }
 
         buf = new byte[2];
-        buf[0] = (byte) (this.Port & 0xff);
-        buf[1] = (byte) ((this.Port >> 8) & 0xff);
+        buf[1] = (byte) (this.Port & 0xff);
+        buf[0] = (byte) ((this.Port >> 8) & 0xff);
 
         payload[16] = buf[0];
         payload[17] = buf[1];
@@ -362,9 +347,9 @@ public class Connector extends Thread
             payload[22+i] = buf[i];
         }
 
-        byte fc = (byte) this.neighborCount;
+        byte fc = (byte) Neighbors.size();
         byte valid;
-        if (this.neighborCount < 7) valid = 0x00;
+        if (this.Neighbors.size() < 7) valid = 0x00;
         else valid = 0x01;
 
         payload[26] = fc;
@@ -375,8 +360,8 @@ public class Connector extends Thread
             Neighbor friend = Neighbors.get(i).neighbor;
             byte[] port_buf = new byte[2];
 
-            port_buf[0] = (byte) (this.Port & 0xff);
-            port_buf[1] = (byte) ((this.Port >> 8) & 0xff);
+            port_buf[1] = (byte) (this.Port & 0xff);
+            port_buf[0] = (byte) ((this.Port >> 8) & 0xff);
 
             // Port read section
             payload[28+7*i] = port_buf[0];
@@ -384,7 +369,7 @@ public class Connector extends Thread
 
             // ip read section
             byte[] ip = new byte[4];
-            ip = Macro.IpTo4Bytes(friend.IP);
+            if (friend.IP != null)  ip = Macro.IpTo4Bytes(friend.IP);
             payload[30+7*i] = ip[0];
             payload[31+7*i] = ip[1];
             payload[32+7*i] = ip[2];
