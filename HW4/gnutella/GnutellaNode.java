@@ -36,6 +36,15 @@ public class GnutellaNode
         interval = random.nextInt(7);
     }
 
+    public GnutellaNode(int listen, int connect)
+    {
+        ID = Macro.generateString(16);
+        this.ListenPort = listen;
+        this.ConnectPort = connect;
+        Random random = new Random();
+        interval = random.nextInt(7);
+    }
+
     public GnutellaNode(String address)
     {
         ID = Macro.generateString(16);
@@ -47,7 +56,6 @@ public class GnutellaNode
 
     public GnutellaNode(String address, int listen, int connect)
     {
-
         ID = Macro.generateString(16);
         IP = address;
         this.ListenPort = listen;
@@ -103,6 +111,7 @@ public class GnutellaNode
         }
     }
 
+    // TODO: fix me
     public void CheckNeighborLoop() throws Exception
     {
         while (true)
@@ -114,6 +123,7 @@ public class GnutellaNode
                 if (c.in.available() != 0)
                 {
                     // We have a connection. Need to read the header.
+                    System.out.println("DATA AVAILABLE");
                     Connector cn = new Connector(c);
                     cn.setFunction(Macro.READ);
                     Neighbors.set(i, cn);
@@ -143,31 +153,20 @@ public class GnutellaNode
             }
 
             // Check all neighbors and ping friends if requirements are met
-            if (Neighbors.size() < 6)
-            {
-                outerloop:
-                for (int i = 0; i < Neighbors.size(); i++)
-                {
-                    Connector c = Neighbors.get(i);
-                    for (Neighbor n : c.neighbor.Neighbors)
-                    {
-                        // if this neighbor isn't already connected, try to contact
-                        boolean contact = false;
-                        for (int j = 0; j < Neighbors.size(); j++)
-                        {
-                            System.out.println("ArrayList ID " + Neighbors.get(i).neighbor.ID);
-                            System.out.println("Neighbor ID " + n.ID);
-                            //if (Neighbors.get(j).neighbor != null && n.ID.equals(Neighbors.get(j).neighbor.ID)) contact = false;
-                        }
-                        if (contact)
-                        {
-                            Connector con = new Connector(n.IP, n.Port, ID, Neighbors, Macro.OUTGOING);
-                            con.start();
-                            break outerloop;
-                        }
-                    }
-                }
-            }
+            // if (Neighbors.size() < 6)
+            // {
+            //     outerloop:
+            //     for (int i = 0; i < Neighbors.size(); i++)
+            //     {
+            //         Connector c = Neighbors.get(i);
+            //         for (Neighbor n : c.neighbor.Neighbors)
+            //         {
+            //             // if this neighbor isn't already connected, try to contact
+            //             System.out.println(n.Port);
+            //             System.out.println(n.IP);
+            //         }
+            //     }
+            // }
 
             // Wait interval seconds and run again
             Thread.sleep(interval * 1000);

@@ -68,7 +68,6 @@ public class Connector extends Thread
             // Initial connection, made by outgoing call
             if (function == Macro.OUTGOING)
             {
-                System.out.println("Handling outgoing connection...");
                 socket = new Socket(address, Port);
                 in = new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());
@@ -83,8 +82,6 @@ public class Connector extends Thread
                 out.write(connect_payload, 0, connect_payload.length);
                 out.flush();
 
-                System.out.println("Payload sent.");
-
                 in.readFully(return_payload);
 
                 String return_str = new String(return_payload);
@@ -98,23 +95,20 @@ public class Connector extends Thread
 
                     byte[] pong_byte = new byte[23];
 
-                    System.out.println("PING sent. Waiting for PONG.");
-
                     in.readFully(pong_byte);
-
-                    System.out.println("HEADER received.");
 
                     Header pong = Header.deserialize(pong_byte);
 
                     if (pong.pl_descriptor == Macro.PONG)
                     {
-                        System.out.println("PONG RECIEVED.");
                         // read the pong payload
                         byte[] payload = new byte[pong.pl_length];
                         
                         in.readFully(payload);
 
                         Neighbor neighbor = Neighbor.decodePong(payload);
+
+                        System.out.println("Neighbor port value: " + neighbor.Port);
 
                         this.neighbor = neighbor;
 
@@ -123,15 +117,11 @@ public class Connector extends Thread
 
                         // decide whether to contact new agents
                     }
-                    neighborCount = Neighbors.size();
-                    System.out.println("Neighbor count: " + neighborCount); 
-                    System.out.println("PONG PROCESSED. WAITING");
                 }
             }
             // Initial connection. made by incoming connection
             else if (function == Macro.INCOMING)
             {
-                System.out.println("Handling incoming connection....");
                 in = new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());
 
@@ -170,8 +160,6 @@ public class Connector extends Thread
 
                 if (ping.pl_descriptor == Macro.PING)
                 {
-                    System.out.println("PING RECIEVED - " + ping.ID);
-
                     SendPong(ping);
                 }
             }
@@ -216,6 +204,7 @@ public class Connector extends Thread
                     this.neighbor = n;
                 }
             }
+            neighborCount = Neighbors.size();
         } 
         catch (SocketException e)
         {
@@ -289,6 +278,17 @@ public class Connector extends Thread
     {
         try
         {
+            System.out.println("Sending PONG...");
+
+            if (this.neighbor != null)
+            {
+                if (this.neighbor.ID != null && this.neighbor.IP != null)
+                {
+                    System.out.println(this.neighbor.ID);
+                    System.out.println(this.neighbor.IP);
+                    System.out.println(this.neighbor.Port);
+                }
+            }
             Header pong = new Header(ID, Macro.PONG, 1, 0, 28 + 8 * neighborCount);
 
             byte[] header_byte = pong.serialize();
@@ -324,8 +324,6 @@ public class Connector extends Thread
             out.flush();
 
             System.out.println("Pong sent. Byte  length : " + pong_byte.length);
-            neighborCount = Neighbors.size();
-            System.out.println("Neighbor count: " + neighborCount);
         }
         catch (IOException e)
         {
@@ -372,7 +370,7 @@ public class Connector extends Thread
         payload[26] = fc;
         payload[27] = valid;
 
-        for (int i = 0; i < neighborCount; i++)
+        for (int i = 0; i < Neighbors.size(); i++)
         {
             Neighbor friend = Neighbors.get(i).neighbor;
             byte[] port_buf = new byte[2];

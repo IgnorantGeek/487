@@ -34,7 +34,7 @@ public class Neighbor
         buf = new byte[2];
         buf[0] = payload[16];
         buf[1] = payload[17];
-        neighbor.Port = ((buf[0] & 0xff) << 8) | (buf[1] & 0xff);
+        neighbor.Port = ((buf[1] & 0xff) << 8) | (buf[0] & 0xff);
 
         int ip1 = payload[18] & 0xff;
         int ip2 = payload[19] & 0xff;
